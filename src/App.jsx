@@ -92,7 +92,25 @@ const GALLERY_IMAGES = [
   { id: 'gallery-4', src: '/assets/Gallery image 4.png', alt: 'Gallery artwork 4' },
   { id: 'gallery-5', src: '/assets/Gallery image 5.png', alt: 'Gallery artwork 5' },
   { id: 'gallery-6', src: '/assets/Gallery image 6.png', alt: 'Gallery artwork 6' },
+  { id: 'gallery-7', src: '/assets/Gallery image 7.png', alt: 'Gallery artwork 7' },
+  { id: 'gallery-8', src: '/assets/Gallery image 8.png', alt: 'Gallery artwork 8' },
+  { id: 'gallery-9', src: '/assets/Gallery image 9.png', alt: 'Gallery artwork 9' },
+  { id: 'gallery-10', src: '/assets/Gallery image 10.png', alt: 'Gallery artwork 10' },
+  { id: 'gallery-11', src: '/assets/Gallery image 11.png', alt: 'Gallery artwork 11' },
+  { id: 'gallery-12', src: '/assets/Gallery image 12.png', alt: 'Gallery artwork 12' },
+  { id: 'gallery-13', src: '/assets/Gallery image 13.png', alt: 'Gallery artwork 13' },
+  { id: 'gallery-14', src: '/assets/Gallery image 14.png', alt: 'Gallery artwork 14' },
+  { id: 'gallery-15', src: '/assets/Gallery image 15.png', alt: 'Gallery artwork 15' },
+  { id: 'gallery-16', src: '/assets/Gallery image 16.png', alt: 'Gallery artwork 16' },
+  { id: 'gallery-17', src: '/assets/Gallery image 17.png', alt: 'Gallery artwork 17' },
+  { id: 'gallery-18', src: '/assets/Gallery image 18.png', alt: 'Gallery artwork 18' },
 ]
+
+const HOME_SCROLL_IMAGES = GALLERY_IMAGES.slice(0, 8)
+
+const UNIFORM_HEADING_SIZE = 'clamp(36px, 4vw, 64px)'
+const UNIFORM_SUBHEADING_SIZE = 'clamp(24px, 2.2vw, 36px)'
+const UNIFORM_SUBTEXT_SIZE = 'clamp(14px, 1.1vw, 18px)'
 
 // ─── HoverRevealImage ─────────────────────────────────────────────────────────
 
@@ -252,13 +270,13 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
           </p>
           <h3
             className="mt-4 text-white font-bold leading-[1.3] tracking-[0]"
-            style={{ fontSize: 'clamp(18px, 1.6vw, 26px)' }}
+            style={{ fontSize: UNIFORM_SUBHEADING_SIZE }}
           >
             {item.title}
           </h3>
           <p
             className="mt-3 font-normal leading-[1.6] tracking-[0.031em] text-[#878787]"
-            style={{ fontSize: 'clamp(13px, 1vw, 16px)' }}
+            style={{ fontSize: UNIFORM_SUBTEXT_SIZE }}
           >
             {item.description}
           </p>
@@ -384,7 +402,7 @@ function WhatIDoSection() {
         <div className="absolute top-0 left-0 right-0 z-50" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px`, paddingTop: '48px' }}>
           <h2
             className="w-full font-semibold leading-[1.2] tracking-[-0.02em] text-white"
-            style={{ fontSize: 'clamp(32px, 3.5vw, 52px)' }}
+            style={{ fontSize: UNIFORM_HEADING_SIZE }}
           >
             What I Do
           </h2>
@@ -476,7 +494,7 @@ function HomeServicesSection() {
                       ? 'translate-x-4 scale-[1.02] text-white [text-shadow:0_0_12px_rgba(255,255,255,0.14)]'
                       : 'translate-x-0 scale-100 text-transparent [-webkit-text-stroke:1px_#878787]'
                   }`}
-                  style={{ fontSize: 'clamp(24px, 2.8vw, 44px)' }}
+                  style={{ fontSize: UNIFORM_SUBHEADING_SIZE }}
                 >
                   {service.title}
                 </h3>
@@ -561,13 +579,13 @@ function WhereItStartedSection() {
             <div className="max-w-[54%]">
               <h2
                 className="font-semibold leading-[1.1] tracking-[-0.02em] text-white"
-                style={{ fontSize: 'clamp(36px, 4vw, 64px)' }}
+                style={{ fontSize: UNIFORM_HEADING_SIZE }}
               >
                 Where It Started
               </h2>
               <p
                 className="mt-4 leading-[1.6] tracking-[0.01em] text-[#878787]"
-                style={{ fontSize: 'clamp(15px, 1.2vw, 19px)' }}
+                style={{ fontSize: UNIFORM_SUBTEXT_SIZE }}
               >
                 I used to draw a lot during college. That helped me understand form, detail, and visual balance. It
                 shaped how I see design today.
@@ -590,7 +608,7 @@ function WhereItStartedSection() {
               className="flex h-full items-start gap-6"
               style={{ transform: `translateX(${translateX}px)`, transition: 'transform 60ms linear', willChange: 'transform' }}
             >
-              {GALLERY_IMAGES.map((image) => (
+              {HOME_SCROLL_IMAGES.map((image) => (
                 <img
                   key={image.id}
                   src={image.src}
@@ -668,7 +686,7 @@ function Footer() {
               fontSize: 'clamp(20px, 2.2vw, 34px)',
               fontWeight: 400,
               lineHeight: '1.35',
-              maxWidth: '760px',
+              maxWidth: '800px',
             }}
           >
             I'd love to hear from you and explore collaboration, answer your questions, or simply chat.
@@ -814,7 +832,7 @@ function ContactPage() {
           <div className="relative z-10">
             <h1
               className="font-semibold leading-[1.03] tracking-[-0.03em] text-[#F5F5F5]"
-              style={{ fontSize: 'clamp(42px, 5vw, 80px)' }}
+              style={{ fontSize: UNIFORM_HEADING_SIZE }}
             >
               Get In touch
             </h1>
@@ -912,7 +930,7 @@ function ContactPage() {
 
 // ─── GalleryLightbox ──────────────────────────────────────────────────────────
 
-function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev }) {
+function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext, canPrev }) {
   const [zoom, setZoom] = useState(1)
   const [rotation, setRotation] = useState(0)
 
@@ -923,12 +941,12 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev }) {
 
     const onKeyDown = (event) => {
       if (event.key === 'Escape') onClose()
-      if (event.key === 'ArrowRight') onNext()
-      if (event.key === 'ArrowLeft') onPrev()
+      if (event.key === 'ArrowRight' && canNext) onNext()
+      if (event.key === 'ArrowLeft' && canPrev) onPrev()
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [activeIndex, onClose, onNext, onPrev])
+  }, [activeIndex, canNext, canPrev, onClose, onNext, onPrev])
 
   if (activeIndex === null) return null
 
@@ -950,7 +968,15 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev }) {
         <button type="button" onClick={(e) => { e.stopPropagation(); onClose() }} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-base text-white transition-colors hover:border-white/50" aria-label="Close">✕</button>
       </div>
 
-      <button type="button" onClick={(e) => { e.stopPropagation(); onPrev() }} className="absolute left-6 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50" aria-label="Previous image">‹</button>
+      <button
+        type="button"
+        disabled={!canPrev}
+        onClick={(e) => { e.stopPropagation(); if (canPrev) onPrev() }}
+        className="absolute left-6 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50 disabled:cursor-not-allowed disabled:opacity-35"
+        aria-label="Previous image"
+      >
+        ‹
+      </button>
 
       <img
         src={currentImage.src}
@@ -962,7 +988,15 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev }) {
         draggable={false}
       />
 
-      <button type="button" onClick={(e) => { e.stopPropagation(); onNext() }} className="absolute right-6 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50" aria-label="Next image">›</button>
+      <button
+        type="button"
+        disabled={!canNext}
+        onClick={(e) => { e.stopPropagation(); if (canNext) onNext() }}
+        className="absolute right-6 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50 disabled:cursor-not-allowed disabled:opacity-35"
+        aria-label="Next image"
+      >
+        ›
+      </button>
 
       <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-[12px] tracking-[0.08em] text-white/70">
         Esc ✕ · ←/→ · Wheel ±
@@ -1059,7 +1093,7 @@ function HomePage() {
         <div className="pointer-events-none absolute left-0 right-0 top-[119px] z-20 flex items-start justify-between">
           <h1
             className="pl-6 lg:pl-[120px] font-semibold leading-[1.03] tracking-[-0.03em] text-[#F5F5F5]"
-            style={{ fontSize: 'clamp(40px, 4.5vw, 70px)' }}
+            style={{ fontSize: UNIFORM_HEADING_SIZE }}
           >
             Product &<br />Visual Designer
           </h1>
@@ -1136,7 +1170,7 @@ function WorkPage() {
         <div className="py-10">
           <h1
             className="w-full font-semibold leading-[1.2] tracking-[-0.02em] text-white"
-            style={{ fontSize: 'clamp(32px, 3.5vw, 52px)' }}
+            style={{ fontSize: UNIFORM_HEADING_SIZE }}
           >
             What I Do
           </h1>
@@ -1158,8 +1192,11 @@ function WorkPage() {
 function GalleryPage() {
   const [activeIndex, setActiveIndex] = useState(null)
 
-  const goNext = () => setActiveIndex((prev) => (prev === null ? 0 : (prev + 1) % GALLERY_IMAGES.length))
-  const goPrev = () => setActiveIndex((prev) => (prev === null ? 0 : (prev - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length))
+  const goNext = () => setActiveIndex((prev) => (prev === null ? 0 : Math.min(prev + 1, GALLERY_IMAGES.length - 1)))
+  const goPrev = () => setActiveIndex((prev) => (prev === null ? 0 : Math.max(prev - 1, 0)))
+
+  const canPrev = activeIndex !== null && activeIndex > 0
+  const canNext = activeIndex !== null && activeIndex < GALLERY_IMAGES.length - 1
 
   return (
     <main className="min-h-screen bg-[#0A0A0A] text-white">
@@ -1169,31 +1206,26 @@ function GalleryPage() {
         {/* No inner max-width — full bleed within padding */}
         <h1
           className="font-semibold leading-[1.1] tracking-[-0.02em] text-white"
-          style={{ fontSize: 'clamp(36px, 4.5vw, 64px)' }}
+          style={{ fontSize: UNIFORM_HEADING_SIZE }}
         >
-          ✦ Vector illustrations
+          Vector illustrations
         </h1>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
           {GALLERY_IMAGES.map((image, index) => (
             <button
               key={image.id}
               type="button"
               onClick={() => setActiveIndex(index)}
-              className="group relative overflow-hidden bg-[#111111]"
+              className="group relative aspect-square overflow-hidden"
             >
               <img
                 src={image.src}
                 alt={image.alt}
-                className="h-[220px] w-full object-cover transition-transform duration-500 group-hover:scale-105 md:h-[280px] xl:h-[320px]"
+                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 draggable={false}
               />
             </button>
-          ))}
-
-          {/* Template placeholders */}
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div key={`gallery-template-${index}`} className="aspect-square border border-dashed border-[#2A2A2A] bg-[#0E0E0E]" />
           ))}
         </div>
       </section>
@@ -1204,6 +1236,8 @@ function GalleryPage() {
         onClose={() => setActiveIndex(null)}
         onNext={goNext}
         onPrev={goPrev}
+        canNext={canNext}
+        canPrev={canPrev}
       />
       <Footer />
     </main>

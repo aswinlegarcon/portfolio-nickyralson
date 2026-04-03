@@ -523,10 +523,11 @@ function WhereItStartedSection() {
   const [maxShift, setMaxShift] = useState(0)
 
   useEffect(() => {
-    let frame = 0
+    let scrollFrame = 0
+    let measureFrame = 0
 
     const updateProgress = () => {
-      frame = 0
+      scrollFrame = 0
       if (!sectionRef.current || !stickyRef.current) return
 
       const rect = sectionRef.current.getBoundingClientRect()
@@ -537,8 +538,17 @@ function WhereItStartedSection() {
     }
 
     const onScroll = () => {
-      if (frame) return
-      frame = window.requestAnimationFrame(updateProgress)
+      if (scrollFrame) return
+      scrollFrame = window.requestAnimationFrame(updateProgress)
+    }
+
+    const scheduleMeasure = () => {
+      if (measureFrame) return
+      measureFrame = window.requestAnimationFrame(() => {
+        measureFrame = 0
+        updateShiftBounds()
+        updateProgress()
+      })
     }
 
     const updateShiftBounds = () => {
@@ -554,17 +564,54 @@ function WhereItStartedSection() {
       setSectionHeight(`${stickyHeight + pinScrollDistance}px`)
     }
 
-    const onResize = () => { onScroll(); updateShiftBounds() }
+    const onResize = () => {
+      onScroll()
+      scheduleMeasure()
+    }
+
+    const trackImages = trackRef.current
+      ? Array.from(trackRef.current.querySelectorAll('img'))
+      : []
+
+    const imageCleanupFns = []
+    trackImages.forEach((image) => {
+      if (image.complete) return
+      const onImageReady = () => scheduleMeasure()
+      image.addEventListener('load', onImageReady)
+      image.addEventListener('error', onImageReady)
+      imageCleanupFns.push(() => {
+        image.removeEventListener('load', onImageReady)
+        image.removeEventListener('error', onImageReady)
+      })
+    })
+
+    const onWindowLoad = () => scheduleMeasure()
+
+    let resizeObserver = null
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => scheduleMeasure())
+      if (sectionRef.current) resizeObserver.observe(sectionRef.current)
+      if (stickyRef.current) resizeObserver.observe(stickyRef.current)
+      if (trackRef.current) resizeObserver.observe(trackRef.current)
+    }
 
     updateProgress()
     updateShiftBounds()
+    const delayedMeasure = window.setTimeout(scheduleMeasure, 220)
+
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
+    window.addEventListener('load', onWindowLoad)
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
-      if (frame) window.cancelAnimationFrame(frame)
+      window.removeEventListener('load', onWindowLoad)
+      window.clearTimeout(delayedMeasure)
+      imageCleanupFns.forEach((cleanup) => cleanup())
+      if (resizeObserver) resizeObserver.disconnect()
+      if (scrollFrame) window.cancelAnimationFrame(scrollFrame)
+      if (measureFrame) window.cancelAnimationFrame(measureFrame)
     }
   }, [])
 

@@ -502,9 +502,20 @@ function HomeServicesSection() {
                   className={`font-semibold leading-[1.2] tracking-[0] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive
                       ? 'translate-x-4 scale-[1.02] text-white [text-shadow:0_0_12px_rgba(255,255,255,0.14)]'
-                      : 'translate-x-0 scale-100 text-transparent [-webkit-text-stroke:1px_#878787]'
+                      : 'translate-x-0 scale-100'
                   }`}
-                  style={{ fontSize: UNIFORM_SUBHEADING_SIZE }}
+                  style={{
+                    fontSize: UNIFORM_SUBHEADING_SIZE,
+                    fontFamily: "Inter, 'Plus Jakarta Sans', sans-serif",
+                    ...(isActive
+                      ? {}
+                      : {
+                        color: 'transparent',
+                        WebkitTextStroke: '1px #6F7277',
+                        textStroke: '1px #6F7277',
+                        textShadow: 'none',
+                      }),
+                  }}
                 >
                   {service.title}
                 </h3>

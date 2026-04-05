@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import emailjs from '@emailjs/browser'
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 
 const NAV_LINKS = [
   { label: 'Work', href: '/work' },
@@ -50,7 +50,8 @@ const WHAT_I_DO_WORK = [
     description:
       'Structured product dashboards so teams can scan data quickly and act with confidence across devices.',
     image: WORK_TEMPLATE.image,
-    link: 'https://www.behance.net/',
+    link: '/work/product-ui',
+    isInternal: true,
   },
 ]
 
@@ -282,14 +283,23 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
           </p>
         </div>
 
-        <a
-          href={item.link}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.094em] leading-[26px] text-white hover:opacity-70 transition-opacity"
-        >
-          View Work <span aria-hidden="true">→</span>
-        </a>
+        {item.isInternal ? (
+          <Link
+            to={item.link}
+            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.094em] leading-[26px] text-white hover:opacity-70 transition-opacity"
+          >
+            View Work <span aria-hidden="true">→</span>
+          </Link>
+        ) : (
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.094em] leading-[26px] text-white hover:opacity-70 transition-opacity"
+          >
+            View Work <span aria-hidden="true">→</span>
+          </a>
+        )}
       </div>
 
       {/* Right image panel — fixed height on mobile, fills remaining space on desktop */}
@@ -1234,6 +1244,140 @@ function WorkPage() {
   )
 }
 
+// ─── Project3CasePage ────────────────────────────────────────────────────────
+
+function Project3CasePage() {
+  return (
+    <main className="min-h-screen bg-[#0A0A0A] text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+      <TopNav />
+
+      {/* ── Hero: bg image visible at top, gradient dark at bottom ── */}
+      <section className="relative isolate w-full overflow-hidden" style={{ minHeight: '420px' }}>
+        {/* Background image */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            backgroundImage: "url('/assets/work3-bg.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+        {/* Gradient overlay — adjust the rgba opacity values below to control darkness:
+            • Stop 1 (0%):   top of section  — increase 4th value (0→1) to darken the top
+            • Stop 2 (30%):  upper-mid area  — increase to darken where image is brightest
+            • Stop 3 (60%):  lower-mid area  — increase to darken the transition zone
+            • Stop 4 (85%):  near bottom     — keep high so text area is very dark
+            • Stop 5 (100%): bottom edge     — keep at 1 (fully opaque) for solid background */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(10,10,10,0.50) 0%, rgba(10,10,10,0.70) 0%, rgba(10,10,10,0.9) 60%, rgba(10,10,10,0.95) 85%, rgba(10,10,10,1) 100%)',
+          }}
+        />
+
+        {/* Text block pinned to the bottom of the section — no border/box */}
+        <div
+          className="relative z-10 flex flex-col justify-end px-6 pb-12 pt-14 lg:px-[120px] lg:pb-16 lg:pt-0"
+          style={{ minHeight: '420px' }}
+        >
+          <h1
+            className="mt-4 max-w-[1200px] leading-[1.2] tracking-[-0.02em] text-white"
+            style={{ fontSize: 'clamp(28px, 3.2vw, 52px)', fontWeight: 600 }}
+          >
+            I worked on designing homepage layouts for Document360 customers. Each project required quick
+            turnaround while still maintaining visual quality and consistency.
+          </h1>
+        </div>
+      </section>
+
+      {/* ── Problem / Solution ── */}
+      <section className="w-full px-6 py-16 lg:px-[120px] lg:py-20">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+
+          {/* Problem card */}
+          <article className="relative overflow-hidden px-6 pb-8 pt-16 lg:px-8 lg:pb-10 lg:pt-20">
+            {/* Ghost "PROBLEM" text — gradient from subtle dark-gray to transparent */}
+            <p
+              aria-hidden="true"
+              className="pointer-events-none absolute left-5 top-3 select-none font-extrabold uppercase leading-none tracking-[-0.02em] lg:left-7"
+              style={{
+                fontSize: 'clamp(52px, 5.5vw, 72px)',
+                background: 'linear-gradient(180deg, rgba(35,35,35,0.85) 0%, rgba(10,10,10,0) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Problem
+            </p>
+            <p className="text-[clamp(18px,1.6vw,24px)] font-semibold leading-[1.35] text-white">
+              Designing each homepage from scratch was slow and inconsistent.
+            </p>
+            <ul className="mt-6 space-y-3 text-[15px] leading-[1.7] text-[#878787]">
+              <li>• Layouts varied across projects</li>
+              <li>• No clear structure to follow</li>
+              <li>• Repeating similar work again and again</li>
+              <li>• Difficult to maintain visual consistency at scale</li>
+            </ul>
+            <p className="mt-6 text-[15px] font-semibold italic leading-[1.6] text-white/90">
+              "This made it hard to deliver fast without compromising quality."
+            </p>
+          </article>
+
+          {/* Solution card */}
+          <article className="relative overflow-hidden px-6 pb-8 pt-16 lg:px-8 lg:pb-10 lg:pt-20">
+            {/* Ghost "SOLUTION" text */}
+            <p
+              aria-hidden="true"
+              className="pointer-events-none absolute left-5 top-3 select-none font-extrabold uppercase leading-none tracking-[-0.02em] lg:left-7"
+              style={{
+                fontSize: 'clamp(52px, 5.5vw, 72px)',
+                background: 'linear-gradient(180deg, rgba(35,35,35,0.85) 0%, rgba(10,10,10,0) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              Solution
+            </p>
+            <p className="text-[clamp(18px,1.6vw,24px)] font-semibold leading-[1.35] text-white">
+              I started building reusable layout structures instead of designing each page from scratch.
+            </p>
+            <ul className="mt-6 space-y-3 text-[15px] leading-[1.7] text-[#878787]">
+              <li>• Defined common layout patterns</li>
+              <li>• Created flexible sections that could be reused</li>
+              <li>• Standardized typography and spacing</li>
+              <li>• Built templates that adapt to different brands</li>
+            </ul>
+            <p className="mt-6 text-[15px] font-semibold italic leading-[1.6] text-white/90">
+              "This made the process faster and more structured."
+            </p>
+          </article>
+        </div>
+      </section>
+
+      {/* ── Outcome — same WorkShowcaseCard as home page ── */}
+      <section className="w-full px-6 pb-20 lg:px-[120px] lg:pb-28">
+        <WorkShowcaseCard
+          item={{
+            id: 'outcome',
+            tag: 'OUTCOME',
+            title: 'Delivered 100+ homepage designs with better consistency and faster execution by using reusable layout systems.',
+            description: '',
+            image: '/assets/Work thumbnail.png',
+            link: '/work',
+            isInternal: true,
+          }}
+        />
+      </section>
+
+      <Footer />
+    </main>
+  )
+}
+
 // ─── GalleryPage ──────────────────────────────────────────────────────────────
 
 function GalleryPage() {
@@ -1293,15 +1437,29 @@ function GalleryPage() {
 
 // ─── App ──────────────────────────────────────────────────────────────────────
 
+function ScrollToTop() {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname])
+
+  return null
+}
+
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/work" element={<WorkPage />} />
-      <Route path="/gallery" element={<GalleryPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/work" element={<WorkPage />} />
+        <Route path="/work/product-ui" element={<Project3CasePage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   )
 }
 

@@ -15,45 +15,92 @@ const WORK_LOGOS = [
   { logo: '/assets/Dealshare.svg', role: 'Graphic designer', company: 'Dealshare', time: 'Jan 2022 - Jul 2023' },
 ]
 
-const WORK_TEMPLATE = {
-  tag: 'WEB DESIGN',
-  title: 'Designing structured and readable web experiences',
-  description:
-    'Designed websites with clear layout and strong visual flow. Focused on making content easy to scan and navigate.',
-  image: '/assets/Work thumbnail.png',
-  link: 'https://www.behance.net/',
-}
-
-const WHAT_I_DO_WORK = [
+const WORK_CARDS = [
   {
-    id: 'featured-1',
-    tag: 'DESIGN SYSTEMS',
-    title: '847 Components, One System',
-    description:
-      'Created a unified design system that sped up prototyping and helped teams ship consistent interfaces across products.',
-    image: WORK_TEMPLATE.image,
-    link: 'https://www.behance.net/',
+    id: 'work-1',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Web design',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'Designed websites with clear layout and strong hierarchy for easy navigation.',
+    image: '/assets/work1-img.png',
+    link: 'https://www.figma.com/proto/ZJvl3bW8ooubpkivtCLQDH/Portfolio--Nicky-Ralson-?node-id=349-6069&t=ri8RnNaPIM9FZf9d-1&scaling=min-zoom&content-scaling=fixed&page-id=349%3A16',
   },
   {
-    id: 'featured-2',
-    tag: 'ENTERPRISE UX',
-    title: 'Making Complexity Disappear',
-    description:
-      'Reimagined an admin portal into a clear, modern workflow that improves access management and user visibility.',
-    image: WORK_TEMPLATE.image,
-    link: 'https://www.behance.net/',
+    id: 'work-2',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Graphic design',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'Designed campaign visuals with a focus on layout clarity and consistency across formats.',
+    image: '/assets/work2-img.png',
+    link: 'https://www.figma.com/proto/ZJvl3bW8ooubpkivtCLQDH/Portfolio--Nicky-Ralson-?node-id=376-890&viewport=-1110%2C2240%2C0.11&t=ayM7UFegeAPlHfKo-1&scaling=min-zoom&content-scaling=fixed&page-id=349%3A17',
   },
   {
-    id: 'featured-3',
-    tag: 'PRODUCT UI',
-    title: 'Turning Insights into Momentum',
-    description:
-      'Structured product dashboards so teams can scan data quickly and act with confidence across devices.',
-    image: WORK_TEMPLATE.image,
+    id: 'work-3',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Template Design',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'Created reusable templates to maintain consistency and scale across pages.',
+    image: '/assets/work3-img.png',
     link: '/work/product-ui',
     isInternal: true,
   },
+  {
+    id: 'work-4',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'PENTED (E-Learning App)',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'An e-learning experience with clear content structure and improved readability for learners.',
+    image: '/assets/work4-img.jpg',
+    link: 'https://www.behance.net/gallery/163595823/Ux-Case-Study-PENTED(E-Learning-app) ',
+  },
+  {
+    id: 'work-5',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Campus Share',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'A social platform concept with clean layout and structured user flow for campus interactions.',
+    image: '/assets/work5-img.jpg',
+    link: 'https://www.behance.net/gallery/169085861/Campus-Share-UiUx-Case-Study ',
+  },
+  {
+    id: 'work-6',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Myntra – Fashion Ustav',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'Campaign visuals for a festive sale, focused on layout clarity and brand consistency.',
+    image: '/assets/work6-img.jpg',
+    link: 'https://www.behance.net/gallery/185644493/Myntra-Fashion-Ustav ',
+  },
+  {
+    id: 'work-7',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Resume Builder App',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'A structured experience for creating resumes with clear steps and simple content flow.',
+    image: '/assets/work7-img.png',
+    link: 'https://nickyralson.medium.com/ui-ux-case-study-resume-builder-app-1729239022df ',
+  },
+  {
+    id: 'work-8',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'IVAR Logo Redesign',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'A refined logo focused on simplifying form and improving visual balance.',
+    image: '/assets/work8-img.png',
+    link: 'https://www.behance.net/gallery/169487645/IVAR-Logo-redesign ',
+  },
+  {
+    id: 'work-9',
+    // CARD HEADING: change `tag` text here for this card.
+    tag: 'Smart Little Ninjas',
+    // CARD SUBHEADING: change `title` text here for this card.
+    title: 'A logo concept with a playful yet structured approach, focused on clarity and character.',
+    image: '/assets/work9-img.png',
+    link: ' https://www.behance.net/gallery/133964101/Smart-little-ninjas-logo-concept',
+  },
 ]
+
+const WHAT_I_DO_WORK = WORK_CARDS.slice(0, 3)
 
 const HOME_SERVICES = [
   {
@@ -77,11 +124,6 @@ const HOME_SERVICES = [
     description: 'Clear visuals across digital, focused on layout and type.',
   },
 ]
-
-const WORK_PAGE_TEMPLATES = Array.from({ length: 6 }, (_, index) => ({
-  ...WORK_TEMPLATE,
-  id: `work-template-${index + 1}`,
-}))
 
 const ABOUT_TEXT =
   'Hi, I am Nicky Ralson. I started with a strong interest in visuals and spent a lot of time learning by doing. As a self-taught designer, I focused on layout, typography, and detail. Over time, my work grew into shaping how things look, feel, and connect across screens. I enjoy refining ideas, improving them step by step, and getting better with every project.'
@@ -111,6 +153,8 @@ const HOME_SCROLL_IMAGES = GALLERY_IMAGES.slice(0, 8)
 
 const UNIFORM_HEADING_SIZE = 'clamp(36px, 4vw, 64px)'
 const UNIFORM_SUBHEADING_SIZE = 'clamp(24px, 2.2vw, 36px)'
+const WORK_CARD_SUBHEADING_SIZE = 'clamp(28px, 2.5vw, 38px)'
+const WORK_CARD_FIXED_HEIGHT = 620
 const UNIFORM_SUBTEXT_SIZE = 'clamp(14px, 1.1vw, 18px)'
 
 // ─── HoverRevealImage ─────────────────────────────────────────────────────────
@@ -261,8 +305,16 @@ function TopNav() {
 // Stacks vertically on mobile; side-by-side on md+. Height scales with viewport.
 
 function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
+  const mergedImageStyle = {
+    ...imageStyle,
+    transform: `${imageStyle?.transform ? `${imageStyle.transform} ` : ''}scale(1)`,
+  }
+
   return (
-    <article className="flex w-full flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch">
+    <article
+      className="flex w-full flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch"
+      style={{ height: `${WORK_CARD_FIXED_HEIGHT}px` }}
+    >
       {/* Left info panel */}
       <div className="flex flex-col justify-between bg-[#111111] p-6 md:p-8 xl:p-10 md:flex-shrink-0 md:w-[38%]">
         <div>
@@ -271,16 +323,10 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
           </p>
           <h3
             className="mt-4 text-white font-bold leading-[1.3] tracking-[0]"
-            style={{ fontSize: UNIFORM_SUBHEADING_SIZE }}
+            style={{ fontSize: WORK_CARD_SUBHEADING_SIZE }}
           >
             {item.title}
           </h3>
-          <p
-            className="mt-3 font-normal leading-[1.6] tracking-[0.031em] text-[#878787]"
-            style={{ fontSize: UNIFORM_SUBTEXT_SIZE }}
-          >
-            {item.description}
-          </p>
         </div>
 
         {item.isInternal ? (
@@ -303,12 +349,12 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
       </div>
 
       {/* Right image panel — fixed height on mobile, fills remaining space on desktop */}
-      <div className="relative h-[200px] overflow-hidden bg-[#0C0C0C] md:h-auto md:min-w-0 md:flex-1">
+      <div className="relative h-[200px] overflow-hidden bg-[#0C0C0C] md:h-full md:min-w-0 md:flex-1">
         <img
           src={item.image}
           alt={item.title}
           className={`h-full w-full object-cover object-center ${imageClassName || ''}`}
-          style={imageStyle}
+          style={mergedImageStyle}
           draggable={false}
         />
       </div>
@@ -357,8 +403,6 @@ function CardDots({ total, activeIndex, transitionProgress }) {
 function WhatIDoSection() {
   const containerRef = useRef(null)
   const [scrollProgress, setScrollProgress] = useState(0)
-  /* Responsive card height — reduced vs previous */
-  const [cardHeight, setCardHeight] = useState(420)
   /* Responsive horizontal padding matching page gutters */
   const [hPad, setHPad] = useState(24)
 
@@ -368,8 +412,6 @@ function WhatIDoSection() {
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth
-      // Card height: shorter than before, still scales on wide screens
-      setCardHeight(Math.min(Math.max(340, w * 0.32), 480))
       // Match page padding breakpoints
       setHPad(w >= 1024 ? 120 : 24)
     }
@@ -430,7 +472,7 @@ function WhatIDoSection() {
             left: `${hPad}px`,
             right: `${hPad}px`,
             transform: 'translateY(-50%)',
-            height: `${cardHeight}px`,
+            height: `${WORK_CARD_FIXED_HEIGHT}px`,
           }}
         >
           {cards.map((item, index) => {
@@ -1244,7 +1286,7 @@ function WorkPage() {
           </h1>
 
           <div className="mt-8 flex w-full flex-col gap-8">
-            {WORK_PAGE_TEMPLATES.map((item) => (
+            {WORK_CARDS.map((item) => (
               <WorkShowcaseCard key={item.id} item={item} />
             ))}
           </div>
@@ -1377,9 +1419,9 @@ function Project3CasePage() {
             tag: 'OUTCOME',
             title: 'Delivered 100+ homepage designs with better consistency and faster execution by using reusable layout systems.',
             description: '',
-            image: '/assets/Work thumbnail.png',
-            link: '/work',
-            isInternal: true,
+            image: '/assets/work3-img.png',
+            link: 'https://www.figma.com/proto/ZJvl3bW8ooubpkivtCLQDH/Portfolio--Nicky-Ralson-?node-id=387-4073&viewport=647%2C606%2C0.08&t=nYquiMd4LS0OxI0c-1&scaling=min-zoom&content-scaling=fixed&page-id=349%3A18',
+            isInternal: false,
           }}
         />
       </section>

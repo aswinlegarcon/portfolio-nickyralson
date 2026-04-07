@@ -106,22 +106,22 @@ const HOME_SERVICES = [
   {
     id: '01',
     title: 'Logo & Branding',
-    description: 'Focused on clean and memorable marks. Built with strong form and visual balance.',
+    description: ' Logo Design • Brand Identity • Visual Systems • Brand Assets • Identity Guidelines',
   },
   {
     id: '02',
     title: 'Graphic Design',
-    description: 'Visual direction across typography, color, and layout. Designed to stay consistent.',
+    description: 'Campaign Visuals • Social Media • Marketing Design • Digital Assets • Ad Creatives',
   },
   {
     id: '03',
     title: 'Web Design',
-    description: 'Structured layouts with clear hierarchy and readable flow across screens.',
+    description: ' Website Layouts • Landing Pages • UI Design • Responsive Layouts • Homepage Design',
   },
   {
     id: '04',
     title: 'Illustrations',
-    description: 'Clear visuals across digital, focused on layout and type.',
+    description: ' Vector Illustration • Icon Design • Character Work • Visual Concepts • Custom Graphics',
   },
 ]
 
@@ -565,7 +565,9 @@ function HomeServicesSection() {
 
               <p
                 className="relative z-10 font-normal leading-[1.6] tracking-[0.031em] text-[#878787] transition-colors duration-500 xl:max-w-[480px] xl:text-right"
-                style={{ fontSize: 'clamp(13px, 1vw, 16px)' }}
+                style={{ fontSize: 'clamp(13px, 1vw, 17.5px)', 
+                  textAlign : 'left'
+                }}
               >
                 {service.description}
               </p>

@@ -313,7 +313,7 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
   return (
     <article
       className="flex w-full flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch"
-      style={{ height: `${WORK_CARD_FIXED_HEIGHT}px` }}
+      style={{ minHeight: '460px', height: 'auto' }}
     >
       {/* Left info panel */}
       <div className="flex flex-col justify-between bg-[#111111] p-6 md:p-8 xl:p-10 md:flex-shrink-0 md:w-[38%]">
@@ -349,11 +349,11 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
       </div>
 
       {/* Right image panel — fixed height on mobile, fills remaining space on desktop */}
-      <div className="relative h-[200px] overflow-hidden bg-[#0C0C0C] md:h-full md:min-w-0 md:flex-1">
+      <div className="relative h-[240px] overflow-hidden bg-[#0C0C0C] sm:h-[300px] md:h-auto md:min-h-[420px] md:min-w-0 md:flex-1 lg:min-h-[500px] xl:min-h-[620px]">
         <img
           src={item.image}
           alt={item.title}
-          className={`h-full w-full object-cover object-center ${imageClassName || ''}`}
+          className={`h-full w-full object-contain object-center ${imageClassName || ''}`}
           style={mergedImageStyle}
           draggable={false}
         />

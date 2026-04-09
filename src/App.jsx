@@ -1177,57 +1177,74 @@ function HomePage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{ height: 'clamp(580px, 52vw, 800px)' }}
+        className="relative w-full overflow-hidden h-[460px] sm:h-[520px] md:h-[580px] lg:h-[clamp(580px,52vw,800px)]"
         onMouseEnter={() => setHeroHovered(true)}
         onMouseLeave={() => setHeroHovered(false)}
         onMouseMove={handleHeroMove}
       >
         <div className="absolute inset-0 bg-[#0A0A0A]" />
+        <div
+          className="pointer-events-none absolute inset-0 lg:hidden"
+          style={{
+            backgroundImage: "url('/assets/Hero%20bg.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 lg:hidden"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(10,10,10,0.50) 0%, rgba(10,10,10,0.70) 30%, rgba(10,10,10,0.9) 60%, rgba(10,10,10,0.95) 85%, rgba(10,10,10,1) 100%)',
+          }}
+        />
         <HoverRevealLayer
           src="/assets/Hero%20bg.png"
           active={heroHovered}
           pointer={heroPointer}
           revealSize={230}
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+          className="pointer-events-none absolute inset-0 hidden h-full w-full object-cover lg:block"
         />
 
         <img
           src="/assets/Hero%20bg%20name.svg"
           alt="Nicky Ralson"
-          className="pointer-events-none absolute bottom-[18px] left-1/2 z-10 w-[min(1380px,98vw)] -translate-x-1/2 opacity-55"
+          className="pointer-events-none absolute bottom-[18px] left-1/2 z-10 hidden w-[min(1380px,98vw)] -translate-x-1/2 opacity-55 lg:block"
           style={{ filter: 'grayscale(1) brightness(1.18) contrast(1.08)' }}
           draggable={false}
         />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[260px] bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/85 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[150px] bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/85 to-transparent sm:h-[190px] md:h-[220px] lg:h-[260px]" />
 
         {/* Hero text — left padded; image elements flush right */}
-        <div className="pointer-events-none absolute left-0 right-0 top-[119px] z-20 flex items-start justify-between">
+        <div className="pointer-events-none absolute left-0 right-0 top-[92px] z-20 flex items-start justify-between sm:top-[104px] lg:top-[119px]">
           <h1
-            className="pl-6 lg:pl-[120px] font-semibold leading-[1.03] tracking-[-0.03em] text-[#F5F5F5]"
-            style={{ fontSize: UNIFORM_HEADING_SIZE }}
+            className="max-w-[190px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] tracking-[-0.03em] text-[#F5F5F5] sm:max-w-[230px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
           >
             Product &<br />Visual Designer
           </h1>
 
           {/* Images are flush to the right viewport edge — no right padding */}
           <div className="flex items-start gap-0.5 flex-shrink-0">
-            <img src="/assets/Hero%20image%20element%201.png" alt="Hero element 1" className="h-[clamp(80px,10vw,128px)] w-auto object-cover" />
-            <img src="/assets/Hero%20image%20element%202.png" alt="Hero element 2" className="h-[clamp(80px,10vw,128px)] w-auto object-cover" />
-            <img src="/assets/Hero%20image%20element%203.png" alt="Hero element 3" className="h-[clamp(80px,10vw,128px)] w-auto object-cover" />
+            <img src="/assets/Hero%20image%20element%201.png" alt="Hero element 1" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
+            <img src="/assets/Hero%20image%20element%202.png" alt="Hero element 2" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
+            <img src="/assets/Hero%20image%20element%203.png" alt="Hero element 3" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
           </div>
         </div>
 
         {/* Hero portrait */}
-        <div
-          className="absolute left-1/2 top-[71px] z-10 -translate-x-1/2"
-          style={{ height: 'calc(100% - 71px)', width: 'clamp(480px, 54vw, 800px)' }}
-        >
+        <div className="absolute left-1/2 top-[86px] z-10 h-[calc(100%-86px)] -translate-x-1/2 sm:top-[80px] sm:h-[calc(100%-80px)] lg:top-[71px] lg:h-[calc(100%-71px)]">
+          <img
+            src="/assets/Hero%20image%202.png"
+            alt="Hero person"
+            className="h-full w-[78vw] min-w-[260px] max-w-[800px] object-contain sm:w-[66vw] md:w-[58vw] lg:hidden"
+            draggable={false}
+          />
           <HoverRevealImage
             baseSrc="/assets/Hero%20image%201.png"
             revealSrc="/assets/Hero%20image%202.png"
             alt="Hero person"
-            className="h-full w-full"
+            className="hidden h-full w-[clamp(480px,54vw,800px)] lg:block"
             revealSize={160}
           />
         </div>

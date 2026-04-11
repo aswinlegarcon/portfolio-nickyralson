@@ -155,6 +155,10 @@ const UNIFORM_HEADING_SIZE = 'clamp(36px, 4vw, 64px)'
 const UNIFORM_SUBHEADING_SIZE = 'clamp(24px, 2.2vw, 36px)'
 const WORK_CARD_SUBHEADING_SIZE = 'clamp(28px, 2.5vw, 38px)'
 const WORK_CARD_FIXED_HEIGHT = 620
+const WHAT_I_DO_STICKY_HEIGHT = WORK_CARD_FIXED_HEIGHT + 170
+const WHAT_I_DO_SCROLL_STEP = WORK_CARD_FIXED_HEIGHT
+const WHAT_I_DO_CARD_HIDE_SHIFT = WORK_CARD_FIXED_HEIGHT + 36
+const WORK_PAGE_IMAGE_FIXED_HEIGHT = 620 // STATIC HEIGHT: Work page cards use the same fixed card height style as Home cards.
 const UNIFORM_SUBTEXT_SIZE = 'clamp(14px, 1.1vw, 18px)'
 
 // ─── HoverRevealImage ─────────────────────────────────────────────────────────
@@ -271,7 +275,7 @@ function ScrollReadingText({ text, progress }) {
 
 function TopNav() {
   return (
-    <div className="w-full">
+    <div className="sticky top-0 z-[110] w-full bg-[#0A0A0A]/95 backdrop-blur-sm">
       <nav className="flex items-center justify-between px-6 py-6 lg:px-[120px]">
         <Link to="/" className="inline-flex">
           <img src="/assets/Logo.svg" alt="Logo" className="h-10 w-auto" draggable={false} />
@@ -304,19 +308,32 @@ function TopNav() {
 // ─── WorkShowcaseCard ─────────────────────────────────────────────────────────
 // Stacks vertically on mobile; side-by-side on md+. Height scales with viewport.
 
-function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
+function WorkShowcaseCard({
+  item,
+  imageStyle,
+  imageClassName,
+  imageZoom = 1,
+  imagePanelHeight,
+  cardHeight,
+  imageObjectFit = 'contain',
+  imageInset,
+}) {
   const mergedImageStyle = {
     ...imageStyle,
-    transform: `${imageStyle?.transform ? `${imageStyle.transform} ` : ''}scale(1)`,
+    transform: `${imageStyle?.transform ? `${imageStyle.transform} ` : ''}scale(${imageZoom})`,
   }
+
+  const cardStyle = cardHeight
+    ? { minHeight: `${cardHeight}px`, height: `${cardHeight}px` }
+    : { minHeight: '460px', height: 'auto' }
 
   return (
     <article
-      className="flex w-full flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch"
-      style={{ minHeight: '460px', height: 'auto' }}
+      className="mx-auto flex w-full max-w-[1200px] flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch"
+      style={cardStyle}
     >
       {/* Left info panel */}
-      <div className="flex flex-col justify-between bg-[#111111] p-6 md:p-8 xl:p-10 md:flex-shrink-0 md:w-[38%]">
+      <div className="flex flex-col justify-between bg-[#111111] p-6 md:p-8 xl:p-10 md:flex-shrink-0 md:w-1/2">
         <div>
           <p className="text-[12px] font-normal uppercase tracking-[0.107em] leading-[26px] text-[#878787]">
             {item.tag}
@@ -349,14 +366,22 @@ function WorkShowcaseCard({ item, imageStyle, imageClassName }) {
       </div>
 
       {/* Right image panel — fixed height on mobile, fills remaining space on desktop */}
-      <div className="relative h-[240px] overflow-hidden bg-[#0C0C0C] sm:h-[300px] md:h-auto md:min-h-[420px] md:min-w-0 md:flex-1 lg:min-h-[500px] xl:min-h-[620px]">
-        <img
-          src={item.image}
-          alt={item.title}
-          className={`h-full w-full object-contain object-center ${imageClassName || ''}`}
-          style={mergedImageStyle}
-          draggable={false}
-        />
+      <div
+        className="relative h-[240px] overflow-hidden bg-[#0C0C0C] sm:h-[300px] md:h-auto md:min-h-[420px] md:min-w-0 md:w-1/2 md:flex-shrink-0"
+        style={imagePanelHeight ? { height: `${imagePanelHeight}px` } : undefined}
+      >
+        <div className="absolute inset-0" style={imageInset}>
+          <img
+            src={item.image}
+            alt={item.title}
+            className={`h-full w-full object-center ${imageClassName || ''}`}
+            style={{
+              ...mergedImageStyle,
+              objectFit: imageObjectFit,
+            }}
+            draggable={false}
+          />
+        </div>
       </div>
     </article>
   )
@@ -408,6 +433,7 @@ function WhatIDoSection() {
 
   const cards = WHAT_I_DO_WORK
   const total = cards.length
+  const sectionHeight = WHAT_I_DO_STICKY_HEIGHT + (total - 1) * WHAT_I_DO_SCROLL_STEP
 
   useEffect(() => {
     const update = () => {
@@ -447,8 +473,8 @@ function WhatIDoSection() {
   const t = cardFloat - activeIndex
 
   return (
-    <section id="work" ref={containerRef} style={{ height: `${total * 80}vh` }}>
-      <div className="sticky top-0 overflow-hidden bg-[#0A0A0A]" style={{ height: '80vh' }}>
+    <section id="work" ref={containerRef} style={{ height: `${sectionHeight}px` }}>
+      <div className="sticky top-0 overflow-hidden bg-[#0A0A0A]" style={{ height: `${WHAT_I_DO_STICKY_HEIGHT}px` }}>
 
         {/* Section heading */}
         <div className="absolute top-0 left-0 right-0 z-50" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px`, paddingTop: '48px' }}>
@@ -467,8 +493,8 @@ function WhatIDoSection() {
         <div
           style={{
             position: 'absolute',
-            /* Shift centre down by ~32px so heading doesn't overlap */
-            top: 'calc(50% + 32px)',
+            /* Shift centre down a bit more to increase heading-to-card spacing */
+            top: 'calc(50% + 80px)',
             left: `${hPad}px`,
             right: `${hPad}px`,
             transform: 'translateY(-50%)',
@@ -483,9 +509,9 @@ function WhatIDoSection() {
             } else if (index === activeIndex) {
               translateY = '0px'; blurPx = t * 14; imageShiftPx = t * 48; zIndex = total
             } else if (index === activeIndex + 1) {
-              translateY = `${(1 - t) * 100}vh`; blurPx = 0; imageShiftPx = 0; zIndex = total + 1
+              translateY = `${(1 - t) * WHAT_I_DO_CARD_HIDE_SHIFT}px`; blurPx = 0; imageShiftPx = 0; zIndex = total + 1
             } else {
-              translateY = '100vh'; blurPx = 0; imageShiftPx = 0; zIndex = index
+              translateY = `${WHAT_I_DO_CARD_HIDE_SHIFT}px`; blurPx = 0; imageShiftPx = 0; zIndex = index
             }
 
             return (
@@ -502,6 +528,9 @@ function WhatIDoSection() {
               >
                 <WorkShowcaseCard
                   item={item}
+                  imageZoom={1.16}
+                  imageObjectFit="cover"
+                  imageInset={{ top: '40px', right: '0px', left: '28px', bottom: '0px' }}
                   imageStyle={{ transform: `translateX(${imageShiftPx}px)`, transition: 'none' }}
                 />
               </div>
@@ -519,8 +548,8 @@ function HomeServicesSection() {
   const [activeId, setActiveId] = useState(null)
 
   return (
-    /* pt-[72px] = breathing room between the sticky card section and services */
-    <section className="w-full bg-[#0A0A0A] px-6 pb-[80px] pt-[72px] lg:px-[120px]">
+    /* Reduced top gap after What I Do section */
+    <section className="w-full bg-[#0A0A0A] px-6 pb-[80px] pt-[28px] lg:px-[120px]">
       <div onMouseLeave={() => setActiveId(null)}>
         {HOME_SERVICES.map((service) => {
           const isActive = activeId === service.id
@@ -1072,7 +1101,7 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 p-6" onClick={onClose}>
-      <div className="absolute right-6 top-6 flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-3 py-2 backdrop-blur">
+      <div className="absolute right-6 top-6 z-20 flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-3 py-2 backdrop-blur">
         <button type="button" onClick={(e) => { e.stopPropagation(); setZoom((p) => Math.max(0.6, p - 0.2)) }} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-lg text-white transition-colors hover:border-white/50" aria-label="Zoom out">−</button>
         <button type="button" onClick={(e) => { e.stopPropagation(); setZoom((p) => Math.min(3, p + 0.2)) }} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-lg text-white transition-colors hover:border-white/50" aria-label="Zoom in">+</button>
         <button type="button" onClick={(e) => { e.stopPropagation(); setRotation((p) => p + 90) }} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-base text-white transition-colors hover:border-white/50" aria-label="Rotate">⟳</button>
@@ -1084,7 +1113,7 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext
         type="button"
         disabled={!canPrev}
         onClick={(e) => { e.stopPropagation(); if (canPrev) onPrev() }}
-        className="absolute left-6 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50 disabled:cursor-not-allowed disabled:opacity-35"
+        className="absolute left-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50 disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="Previous image"
       >
         ‹
@@ -1104,7 +1133,7 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext
         type="button"
         disabled={!canNext}
         onClick={(e) => { e.stopPropagation(); if (canNext) onNext() }}
-        className="absolute right-6 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50 disabled:cursor-not-allowed disabled:opacity-35"
+        className="absolute right-6 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/50 text-2xl text-white transition-colors hover:border-white/50 disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="Next image"
       >
         ›
@@ -1305,9 +1334,21 @@ function WorkPage() {
           </h1>
 
           <div className="mt-8 flex w-full flex-col gap-8">
-            {WORK_CARDS.map((item) => (
-              <WorkShowcaseCard key={item.id} item={item} />
-            ))}
+            {WORK_CARDS.map((item, index) => {
+              const isFirstThree = index < 3
+
+              return (
+                <WorkShowcaseCard
+                  key={item.id}
+                  item={item}
+                  cardHeight={WORK_PAGE_IMAGE_FIXED_HEIGHT}
+                  imagePanelHeight={WORK_PAGE_IMAGE_FIXED_HEIGHT}
+                  imageZoom={isFirstThree ? 1.16 : 1}
+                  imageObjectFit={isFirstThree ? 'cover' : 'contain'}
+                  imageInset={isFirstThree ? { top: '40px', right: '0px', left: '28px', bottom: '0px' } : undefined}
+                />
+              )
+            })}
           </div>
         </div>
       </section>
@@ -1433,6 +1474,7 @@ function Project3CasePage() {
       {/* ── Outcome — same WorkShowcaseCard as home page ── */}
       <section className="w-full px-6 pb-20 lg:px-[120px] lg:pb-28">
         <WorkShowcaseCard
+          imageObjectFit="contain"
           item={{
             id: 'outcome',
             tag: 'OUTCOME',

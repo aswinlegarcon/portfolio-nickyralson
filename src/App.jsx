@@ -980,13 +980,29 @@ function ContactPage() {
         onMouseLeave={() => setHeroHovered(false)}
         onMouseMove={handleHeroMove}
       >
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[#0A0A0A]" />
+        <div className="absolute inset-0 bg-[#0A0A0A]" />
+        <div
+          className="pointer-events-none absolute inset-0 lg:hidden"
+          style={{
+            backgroundImage: "url('/assets/Hero%20bg.png')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 lg:hidden"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(10,10,10,0.60) 0%, rgba(10,10,10,0.75) 30%, rgba(10,10,10,0.90) 60%, rgba(10,10,10,0.95) 85%, rgba(10,10,10,1) 100%)',
+          }}
+        />
         <HoverRevealLayer
           src="/assets/Hero%20bg.png"
           active={heroHovered}
           pointer={heroPointer}
           revealSize={230}
-          className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover"
+          className="pointer-events-none absolute inset-0 z-0 hidden h-full w-full object-cover lg:block"
         />
 
         {/* Form layout — no top padding so it sits tight under the navbar */}
@@ -1038,30 +1054,19 @@ function ContactPage() {
             ) : null}
           </form>
 
-          {/* LET'S TALK watermark behind form */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-4 z-0 hidden h-[190px] items-end justify-center px-6 md:flex lg:bottom-8 lg:h-[260px] lg:px-[120px]">
-            <span
-              className="block w-full select-none text-center"
-              style={{
-                fontFamily: 'Bebas Neue, sans-serif',
-                fontWeight: 600,
-                fontSize: 'clamp(120px, 14vw, 240px)',
-                lineHeight: '70%',
-                letterSpacing: '0%',
-                textTransform: 'uppercase',
-                whiteSpace: 'nowrap',
-                display: 'inline-block',
-                transform: 'translateY(18%) scaleY(1.4)',
-                transformOrigin: 'center bottom',
-                background: 'linear-gradient(180deg, #232323 0%, rgba(10,10,10,0) 100%)',
-                WebkitBackgroundClip: 'text',
-                backgroundClip: 'text',
-                color: 'transparent',
-              }}
-            >
-              LET&apos;S TALK
-            </span>
-          </div>
+          {/* CONTACT BG TEXT IMAGE (edit this block to adjust position/size/opacity) */}
+          <img
+            src="/assets/contact-bg-text.svg" // CHANGE IMAGE FILE HERE
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-0 hidden mx-auto lg:block"
+            style={{
+              width: 'clamp(820px, 67.2vw, 1100px)', // CHANGE WIDTH HERE: 1100 max, ~968 at 1440px viewport
+              opacity: 0.9, // CHANGE OPACITY HERE (0 to 1)
+            }}
+            draggable={false}
+          />
+
         </div>
       </section>
 

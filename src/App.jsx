@@ -154,11 +154,10 @@ const HOME_SCROLL_IMAGES = GALLERY_IMAGES.slice(0, 8)
 const UNIFORM_HEADING_SIZE = 'clamp(36px, 4vw, 64px)'
 const UNIFORM_SUBHEADING_SIZE = 'clamp(24px, 2.2vw, 36px)'
 const WORK_CARD_SUBHEADING_SIZE = 'clamp(28px, 2.5vw, 38px)'
-const WORK_CARD_FIXED_HEIGHT = 620
+const WORK_CARD_FIXED_HEIGHT = 480
 const WHAT_I_DO_STICKY_HEIGHT = WORK_CARD_FIXED_HEIGHT + 170
 const WHAT_I_DO_SCROLL_STEP = WORK_CARD_FIXED_HEIGHT
 const WHAT_I_DO_CARD_HIDE_SHIFT = WORK_CARD_FIXED_HEIGHT + 36
-const WORK_PAGE_IMAGE_FIXED_HEIGHT = 620 // STATIC HEIGHT: Work page cards use the same fixed card height style as Home cards.
 const UNIFORM_SUBTEXT_SIZE = 'clamp(14px, 1.1vw, 18px)'
 
 // ─── HoverRevealImage ─────────────────────────────────────────────────────────
@@ -204,7 +203,7 @@ function HoverRevealImage({ baseSrc, revealSrc, alt, className, revealSize = 100
         alt={alt}
         className="pointer-events-none absolute inset-0 h-full w-full object-contain object-center transition-opacity duration-300"
         style={{
-          opacity: isHovered ? 0.5 : 0,
+          opacity: isHovered ? 1 : 0,
           transform: 'translateX(14px)',
           WebkitMaskImage: mask,
           maskImage: mask,
@@ -526,11 +525,33 @@ function WhatIDoSection() {
                   willChange: 'transform, filter',
                 }}
               >
+                {/*
+                  ── FIX 1: Home page "What I Do" cards ───────────────────────────
+                  cardHeight={WORK_CARD_FIXED_HEIGHT}
+                    → Explicitly sets the article to 620 px.
+                      Without this prop, the article uses height:auto and collapses
+                      to ~330 px even though its absolute-positioned parent is 620 px
+                      (CSS does NOT auto-inherit height from an absolute ancestor).
+
+                  imageObjectFit="cover"
+                    → Image scales to fill every corner of the panel with no dark gaps.
+
+                  imageZoom removed (was 1.16)
+                    → The old zoom cropped the image; plain cover is enough.
+
+                  imageInset removed ({ top:'40px', left:'28px' … })
+                    → imageInset shrank the *container* div, not the image itself.
+                      object-cover then filled the smaller container by zooming in
+                      and cutting off the image edges. Removing the inset lets the
+                      image fill the full panel without any cropping.
+
+                  imageStyle kept
+                    → Still drives the translateX scroll-animation between cards.
+                */}
                 <WorkShowcaseCard
                   item={item}
-                  imageZoom={1.16}
+                  cardHeight={WORK_CARD_FIXED_HEIGHT}
                   imageObjectFit="cover"
-                  imageInset={{ top: '40px', right: '0px', left: '28px', bottom: '0px' }}
                   imageStyle={{ transform: `translateX(${imageShiftPx}px)`, transition: 'none' }}
                 />
               </div>
@@ -1334,21 +1355,34 @@ function WorkPage() {
           </h1>
 
           <div className="mt-8 flex w-full flex-col gap-8">
-            {WORK_CARDS.map((item, index) => {
-              const isFirstThree = index < 3
+            {WORK_CARDS.map((item) => (
+              /*
+                ── FIX 2: Work page cards ────────────────────────────────────────
+                cardHeight={WORK_CARD_FIXED_HEIGHT}
+                  → All 9 cards are now explicitly 620 px tall — the same height
+                    as the home page "What I Do" cards (both use WORK_CARD_FIXED_HEIGHT).
 
-              return (
-                <WorkShowcaseCard
-                  key={item.id}
-                  item={item}
-                  cardHeight={WORK_PAGE_IMAGE_FIXED_HEIGHT}
-                  imagePanelHeight={WORK_PAGE_IMAGE_FIXED_HEIGHT}
-                  imageZoom={isFirstThree ? 1.16 : 1}
-                  imageObjectFit={isFirstThree ? 'cover' : 'contain'}
-                  imageInset={isFirstThree ? { top: '40px', right: '0px', left: '28px', bottom: '0px' } : undefined}
-                />
-              )
-            })}
+                imagePanelHeight removed
+                  → Previously set to 620 px but that was redundant; md:h-auto +
+                    items-stretch already fills the panel to the card's full height.
+
+                imageObjectFit="cover" (all cards, no isFirstThree split)
+                  → Every image fills all four corners. Previously cards 4-9 used
+                    'contain', which left dark background visible around the image.
+
+                imageInset removed ({ top:'40px', left:'28px' … })
+                  → Caused cropping (see FIX 1 comment above for full explanation).
+
+                imageZoom removed (was 1.16 / 1)
+                  → Plain cover is enough; extra zoom only added unwanted cropping.
+              */
+              <WorkShowcaseCard
+                key={item.id}
+                item={item}
+                cardHeight={WORK_CARD_FIXED_HEIGHT}
+                imageObjectFit="cover"
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -1471,10 +1505,21 @@ function Project3CasePage() {
         </div>
       </section>
 
-      {/* ── Outcome — same WorkShowcaseCard as home page ── */}
+      {/* ── Outcome — WorkShowcaseCard matching the home & work page card size ── */}
       <section className="w-full px-6 pb-20 lg:px-[120px] lg:pb-28">
+        {/*
+          ── FIX 3: Project 3 outcome card ─────────────────────────────────────
+          cardHeight={WORK_CARD_FIXED_HEIGHT}
+            → Locks this card to 620 px, identical to home page and work page cards.
+              Without this it used height:auto and was shorter than all other cards.
+
+          imageObjectFit changed from 'contain' → 'cover'
+            → 'contain' shrank the image inside the panel, leaving dark background
+              visible on the sides. 'cover' makes the image fill all four corners.
+        */}
         <WorkShowcaseCard
-          imageObjectFit="contain"
+          cardHeight={WORK_CARD_FIXED_HEIGHT}
+          imageObjectFit="cover"
           item={{
             id: 'outcome',
             tag: 'OUTCOME',

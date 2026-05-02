@@ -212,6 +212,17 @@ function HoverRevealImage({ baseSrc, revealSrc, alt, className, revealSize = 100
         }}
         draggable={false}
       />
+      {/* Bottom gradient overlay — small fade at the bottom of the hero image, hidden on hover.
+         CHANGE GRADIENT HEIGHT: adjust the height percentage below (e.g. '20%', '40%').
+         CHANGE GRADIENT DARKNESS: adjust rgba alpha (0.85 = 85% dark) in the linear-gradient. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-10 transition-opacity duration-300"
+        style={{
+          height: '20%',
+          background: 'linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 100%)',
+          opacity: isHovered ? 0 : 1,
+        }}
+      />
     </div>
   )
 }
@@ -789,19 +800,19 @@ function WhereItStartedSection() {
             </Link>
           </div>
 
-          {/* IMAGE STRIP */}
-          <div className="relative h-[340px] w-full overflow-hidden xl:h-[420px]">
+          {/* IMAGE STRIP — CHANGE HEIGHT: mobile h-[400px], desktop xl:h-[500px] */}
+          <div className="relative h-[400px] w-full overflow-hidden xl:h-[500px]">
             <div
               ref={trackRef}
               className="flex h-full items-start gap-6"
-              style={{ transform: `translateX(${translateX}px)`, transition: 'transform 60ms linear', willChange: 'transform' }}
+              style={{ transform: `translateX(${translateX}px)`, transition: 'transform 60ms linear', willChange: 'transform', width: 'max-content' }}
             >
               {HOME_SCROLL_IMAGES.map((image) => (
                 <img
                   key={image.id}
                   src={image.src}
                   alt={image.alt}
-                  className="h-full w-auto"
+                  className="h-full w-auto flex-shrink-0"
                   draggable={false}
                 />
               ))}
@@ -1296,15 +1307,18 @@ function HomePage() {
         />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[150px] bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/85 to-transparent sm:h-[190px] md:h-[220px] lg:h-[260px]" />
 
-        {/* Hero text — left padded; image elements flush right */}
-        <div className="pointer-events-none absolute left-0 right-0 top-[92px] z-20 flex items-start justify-between sm:top-[104px] lg:top-[119px]">
+        {/* Hero text — left padded; image elements flush right
+           MOBILE POSITION: top-[62px] controls vertical position on mobile (decrease to move up)
+           MOBILE TEXT WIDTH: max-w-[240px] controls how wide the heading is on mobile (increase for fewer lines) */}
+        <div className="pointer-events-none absolute left-0 right-0 top-[50px] z-20 flex items-start justify-between sm:top-[74px] lg:top-[119px]">
           <h1
-            className="max-w-[190px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] text-[#F5F5F5] sm:max-w-[230px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
+            className="max-w-[240px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] text-[#F5F5F5] sm:max-w-[280px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
           >
-            Product &<br />Visual Designer
+            Visual &<br />Product Designer
           </h1>
 
-          {/* Images are flush to the right viewport edge — no right padding */}
+          {/* Images are flush to the right viewport edge — no right padding
+             These images share the same top offset as the hero text wrapper above */}
           <div className="flex items-start gap-0.5 flex-shrink-0">
             <img src="/assets/Hero%20image%20element%201.png" alt="Hero element 1" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
             <img src="/assets/Hero%20image%20element%202.png" alt="Hero element 2" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
@@ -1386,7 +1400,7 @@ function WorkPage() {
             What I Do
           </h1>
 
-          <div className="mt-8 flex w-full flex-col gap-8">
+          <div className="mt-8 flex w-full flex-col gap-8 lg:mt-14">
             {WORK_CARDS.map((item) => (
               /*
                 ── FIX 2: Work page cards ────────────────────────────────────────
@@ -1594,7 +1608,7 @@ function GalleryPage() {
           Vector illustrations
         </h1>
 
-        <div className="mt-10 grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 xl:grid-cols-3 2xl:grid-cols-4 lg:mt-14">
           {GALLERY_IMAGES.map((image, index) => (
             <button
               key={image.id}

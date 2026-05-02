@@ -251,7 +251,7 @@ function ScrollReadingText({ text, progress }) {
   return (
     /* Responsive font: 28px on mobile → scales with viewport → caps at 52px on huge screens */
     <p
-      className="text-center font-semibold leading-[1.2] tracking-[-0.02em]"
+      className="text-center font-semibold leading-[1.2]"
       style={{ fontSize: 'clamp(26px, 3.2vw, 52px)' }}
     >
       {words.map((word, index) => {
@@ -334,11 +334,11 @@ function WorkShowcaseCard({
       {/* Left info panel */}
       <div className="flex flex-col justify-between bg-[#111111] p-6 md:p-8 xl:p-10 md:flex-shrink-0 md:w-1/2">
         <div>
-          <p className="text-[12px] font-normal uppercase tracking-[0.107em] leading-[26px] text-[#878787]">
+          <p className="text-[12px] font-normal uppercase leading-[26px] text-[#878787]">
             {item.tag}
           </p>
           <h3
-            className="mt-4 text-white font-bold leading-[1.3] tracking-[0]"
+            className="mt-4 text-white font-semibold leading-[1.3]"
             style={{ fontSize: WORK_CARD_SUBHEADING_SIZE }}
           >
             {item.title}
@@ -348,7 +348,7 @@ function WorkShowcaseCard({
         {item.isInternal ? (
           <Link
             to={item.link}
-            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.094em] leading-[26px] text-white hover:opacity-70 transition-opacity"
+            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase leading-[26px] text-white hover:opacity-70 transition-opacity"
           >
             View Work <span aria-hidden="true">→</span>
           </Link>
@@ -357,7 +357,7 @@ function WorkShowcaseCard({
             href={item.link}
             target="_blank"
             rel="noreferrer"
-            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase tracking-[0.094em] leading-[26px] text-white hover:opacity-70 transition-opacity"
+            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase leading-[26px] text-white hover:opacity-70 transition-opacity"
           >
             View Work <span aria-hidden="true">→</span>
           </a>
@@ -478,7 +478,7 @@ function WhatIDoSection() {
         {/* Section heading */}
         <div className="absolute top-0 left-0 right-0 z-50" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px`, paddingTop: '48px' }}>
           <h2
-            className="w-full font-semibold leading-[1.2] tracking-[-0.02em] text-white"
+            className="w-full font-semibold leading-[1.2] text-white"
             style={{ fontSize: UNIFORM_HEADING_SIZE }}
           >
             What I Do
@@ -585,20 +585,20 @@ function HomeServicesSection() {
             >
               <div className="relative z-10 flex items-center gap-6 xl:gap-10">
                 <span
-                  className="font-semibold leading-none tracking-[0] text-[#CB2C2E] flex-shrink-0"
+                  className="font-semibold leading-none text-[#CB2C2E] flex-shrink-0"
                   style={{ fontSize: 'clamp(28px, 2.8vw, 44px)' }}
                 >
                   {service.id}
                 </span>
                 <h3
-                  className={`font-semibold leading-[1.2] tracking-[0] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                  className={`font-semibold leading-[1.2] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                     isActive
                       ? 'translate-x-4 scale-[1.02] text-white [text-shadow:0_0_12px_rgba(255,255,255,0.14)]'
                       : 'translate-x-0 scale-100'
                   }`}
                   style={{
                     fontSize: UNIFORM_SUBHEADING_SIZE,
-                    fontFamily: "Inter, 'Plus Jakarta Sans', sans-serif",
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
                     ...(isActive
                       ? {}
                       : {
@@ -614,7 +614,7 @@ function HomeServicesSection() {
               </div>
 
               <p
-                className="relative z-10 font-normal leading-[1.6] tracking-[0.031em] text-[#878787] transition-colors duration-500 xl:max-w-[480px] xl:text-right"
+                className="relative z-10 font-normal leading-[1.6] text-[#878787] transition-colors duration-500 xl:max-w-[480px] xl:text-right"
                 style={{ fontSize: 'clamp(13px, 1vw, 17.5px)', 
                   textAlign : 'left'
                 }}
@@ -740,13 +740,13 @@ function WhereItStartedSection() {
           <div className="flex w-full items-end justify-between gap-8 px-6 lg:px-[120px]">
             <div className="max-w-[54%]">
               <h2
-                className="font-semibold leading-[1.1] tracking-[-0.02em] text-white"
+                className="font-semibold leading-[1.1] text-white"
                 style={{ fontSize: UNIFORM_HEADING_SIZE }}
               >
                 Where It Started
               </h2>
               <p
-                className="mt-4 leading-[1.6] tracking-[0.01em] text-[#878787]"
+                className="mt-4 leading-[1.6] text-[#878787]"
                 style={{ fontSize: UNIFORM_SUBTEXT_SIZE }}
               >
                 I used to draw a lot during college. That helped me understand form, detail, and visual balance. It
@@ -756,7 +756,7 @@ function WhereItStartedSection() {
 
             <Link
               to="/gallery"
-              className="inline-flex flex-shrink-0 items-center gap-2 font-semibold uppercase tracking-[0.094em] text-white hover:opacity-70 transition-opacity"
+              className="inline-flex flex-shrink-0 items-center gap-2 font-semibold uppercase text-white hover:opacity-70 transition-opacity"
               style={{ fontSize: 'clamp(13px, 1vw, 16px)' }}
             >
               View Gallery <span aria-hidden="true">→</span>
@@ -796,7 +796,6 @@ function Footer() {
   return (
     <footer
       className="relative w-full bg-[#0A0A0A]"
-      style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
     >
       {/* Content wrapper with page padding — the bg illustration sits inside this */}
       <div
@@ -857,7 +856,7 @@ function Footer() {
           <a
             href="/contact"
             className="inline-flex items-center justify-center rounded-sm bg-[#CB2C2E] px-8 py-3 text-white transition-opacity hover:opacity-90"
-            style={{ fontSize: 'clamp(14px, 1vw, 18px)', fontWeight: 600, letterSpacing: '0.02em' }}
+            style={{ fontSize: 'clamp(14px, 1vw, 18px)', fontWeight: 600 }}
           >
             Contact
           </a>
@@ -1009,7 +1008,7 @@ function ContactPage() {
         <div className="relative z-10 grid w-full grid-cols-1 gap-12 px-6 pb-28 pt-8 md:grid-cols-[1fr,1.45fr] md:pb-44 lg:px-[120px] lg:pb-56 lg:pt-12">
           <div className="relative z-10">
             <h1
-              className="font-semibold leading-[1.03] tracking-[-0.03em] text-[#F5F5F5]"
+              className="font-semibold leading-[1.03] text-[#F5F5F5]"
               style={{ fontSize: UNIFORM_HEADING_SIZE }}
             >
               Get In touch
@@ -1087,7 +1086,7 @@ function ContactPage() {
 
           <div className="flex items-center gap-2">
             <img src="/assets/location-svgrepo-com 1.svg" alt="" aria-hidden="true" className="h-5 w-5 opacity-60" draggable={false} />
-            <span className="text-[18px] font-normal leading-[38px] tracking-[0] text-[#878787]">Coimbatore, Tamil Nadu</span>
+            <span className="text-[18px] font-normal leading-[38px] text-[#878787]">Coimbatore, Tamil Nadu</span>
           </div>
         </div>
       </footer>
@@ -1165,7 +1164,7 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext
         ›
       </button>
 
-      <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-[12px] tracking-[0.08em] text-white/70">
+      <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-4 py-2 text-[12px] text-white/70">
         Esc ✕ · ←/→ · Wheel ±
       </div>
     </div>
@@ -1274,7 +1273,7 @@ function HomePage() {
         {/* Hero text — left padded; image elements flush right */}
         <div className="pointer-events-none absolute left-0 right-0 top-[92px] z-20 flex items-start justify-between sm:top-[104px] lg:top-[119px]">
           <h1
-            className="max-w-[190px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] tracking-[-0.03em] text-[#F5F5F5] sm:max-w-[230px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
+            className="max-w-[190px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] text-[#F5F5F5] sm:max-w-[230px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
           >
             Product &<br />Visual Designer
           </h1>
@@ -1320,15 +1319,17 @@ function HomePage() {
               className="flex items-center gap-4 bg-[#0A0A0A] px-6 py-5 transition-colors hover:bg-[#111111]"
             >
               <img src={item.logo} alt={item.company} className="h-12 w-12 rounded-sm bg-white p-2 object-contain flex-shrink-0" draggable={false} />
-              <div>
-                <p
-                  className="font-medium leading-tight text-white"
-                  style={{ fontSize: 'clamp(15px, 1.2vw, 19px)' }}
-                >
-                  {item.role}
-                </p>
-                <p className="mt-1 text-[13px] text-[#A0A0A0]">{item.company}</p>
-                <p className="text-[12px] text-[#7C7C7C]">{item.time}</p>
+              <div className="flex flex-1 flex-col">
+                <div className="flex items-center justify-between gap-2">
+                  <p
+                    className="font-semibold leading-tight text-white"
+                    style={{ fontSize: 'clamp(15px, 1.2vw, 19px)' }}
+                  >
+                    {item.role}
+                  </p>
+                  <p className="text-[13px] text-[#A0A0A0] flex-shrink-0">{item.company}</p>
+                </div>
+                <p className="mt-1 text-[12px] text-[#7C7C7C]">{item.time}</p>
               </div>
             </div>
           ))}
@@ -1353,7 +1354,7 @@ function WorkPage() {
       <section className="w-full px-6 py-20 lg:px-[120px]">
         <div className="py-10">
           <h1
-            className="w-full font-semibold leading-[1.2] tracking-[-0.02em] text-white"
+            className="w-full font-semibold leading-[1.2] text-white"
             style={{ fontSize: UNIFORM_HEADING_SIZE }}
           >
             What I Do
@@ -1400,7 +1401,7 @@ function WorkPage() {
 
 function Project3CasePage() {
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-white" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <main className="min-h-screen bg-[#0A0A0A] text-white">
       <TopNav />
 
       {/* ── Hero: bg image visible at top, gradient dark at bottom ── */}
@@ -1435,8 +1436,8 @@ function Project3CasePage() {
           style={{ minHeight: '420px' }}
         >
           <h1
-            className="mt-4 max-w-[1200px] leading-[1.2] tracking-[-0.02em] text-white"
-            style={{ fontSize: 'clamp(28px, 3.2vw, 52px)', fontWeight: 600 }}
+            className="mt-4 max-w-[1200px] font-semibold leading-[1.2] text-white"
+            style={{ fontSize: 'clamp(28px, 3.2vw, 52px)' }}
           >
             I worked on designing homepage layouts for Document360 customers. Each project required quick
             turnaround while still maintaining visual quality and consistency.
@@ -1453,7 +1454,7 @@ function Project3CasePage() {
             {/* Ghost "PROBLEM" text — gradient from subtle dark-gray to transparent */}
             <p
               aria-hidden="true"
-              className="pointer-events-none absolute left-5 top-3 select-none font-extrabold uppercase leading-none tracking-[-0.02em] lg:left-7"
+              className="pointer-events-none absolute left-5 top-3 select-none font-semibold uppercase leading-none lg:left-7"
               style={{
                 fontSize: 'clamp(52px, 5.5vw, 72px)',
                 background: 'linear-gradient(180deg, rgba(35,35,35,0.85) 0%, rgba(10,10,10,0) 100%)',
@@ -1483,7 +1484,7 @@ function Project3CasePage() {
             {/* Ghost "SOLUTION" text */}
             <p
               aria-hidden="true"
-              className="pointer-events-none absolute left-5 top-3 select-none font-extrabold uppercase leading-none tracking-[-0.02em] lg:left-7"
+              className="pointer-events-none absolute left-5 top-3 select-none font-semibold uppercase leading-none lg:left-7"
               style={{
                 fontSize: 'clamp(52px, 5.5vw, 72px)',
                 background: 'linear-gradient(180deg, rgba(35,35,35,0.85) 0%, rgba(10,10,10,0) 100%)',
@@ -1560,7 +1561,7 @@ function GalleryPage() {
       <section className="w-full px-6 py-20 lg:px-[120px]">
         {/* No inner max-width — full bleed within padding */}
         <h1
-          className="font-semibold leading-[1.1] tracking-[-0.02em] text-white"
+          className="font-semibold leading-[1.1] text-white"
           style={{ fontSize: UNIFORM_HEADING_SIZE }}
         >
           Vector illustrations

@@ -187,8 +187,8 @@ function HoverRevealImage({ baseSrc, revealSrc, alt, className, revealSize = 100
       y: event.clientY - bounds.top,
     }
   }
-
-  const mask = `radial-gradient(circle ${revealSize}px at ${cursor.x}px ${cursor.y}px, black 0%, black 45%, transparent 90%)`
+// inner layer of the human image
+  const mask = `radial-gradient(circle ${revealSize+100}px at ${cursor.x}px ${cursor.y}px, black 0%, transparent 90%)`
 
   return (
     <div
@@ -217,9 +217,9 @@ function HoverRevealImage({ baseSrc, revealSrc, alt, className, revealSize = 100
 }
 
 // ─── HoverRevealLayer ─────────────────────────────────────────────────────────
-
-function HoverRevealLayer({ src, active, pointer, revealSize = 240, className }) {
-  const mask = `radial-gradient(circle ${revealSize}px at ${pointer.x}px ${pointer.y}px, black 0%, black 38%, transparent 78%)`
+// outer layer
+function HoverRevealLayer({ src, active, pointer, revealSize = 260, className }) {
+  const mask = `radial-gradient(circle ${revealSize}px at ${pointer.x}px ${pointer.y}px, black 0%, transparent 90%)`
 
   return (
     <img
@@ -228,7 +228,7 @@ function HoverRevealLayer({ src, active, pointer, revealSize = 240, className })
       aria-hidden="true"
       className={className}
       style={{
-        opacity: active ? 0.25 : 0,
+        opacity: active ? 0.3 : 0,
         transition: 'opacity 0.4s ease',
         WebkitMaskImage: mask,
         maskImage: mask,

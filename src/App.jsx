@@ -579,6 +579,15 @@ function WhatIDoSection() {
 
 function HomeServicesSection() {
   const [activeId, setActiveId] = useState(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    setIsMobile(mq.matches)
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   return (
     // ── Services section: 40px top/bottom padding ──
@@ -605,21 +614,23 @@ function HomeServicesSection() {
                 </span>
                 <h3
                   className={`font-semibold leading-[1.2] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isActive
+                    isMobile
+                      ? 'translate-x-0 scale-100 text-white'
+                      : isActive
                       ? 'translate-x-4 scale-[1.02] text-white [text-shadow:0_0_12px_rgba(255,255,255,0.14)]'
                       : 'translate-x-0 scale-100'
                   }`}
                   style={{
                     fontSize: UNIFORM_SUBHEADING_SIZE,
                     fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    ...(isActive
-                      ? {}
-                      : {
+                    ...(!isMobile && !isActive
+                      ? {
                         color: 'transparent',
                         WebkitTextStroke: '1px #6F7277',
                         textStroke: '1px #6F7277',
                         textShadow: 'none',
-                      }),
+                      }
+                      : {}),
                   }}
                 >
                   {service.title}
@@ -752,8 +763,8 @@ function WhereItStartedSection() {
         {/* Heading + subtext row — 20px extra gap below before image strip (via gap-14) */}
         <div className="flex w-full flex-col gap-14">
           {/* Header row — full bleed with page padding */}
-          <div className="flex w-full items-end justify-between gap-8 px-6 lg:px-[120px]">
-            <div className="max-w-[54%]">
+          <div className="flex w-full flex-col items-start gap-4 px-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8 lg:px-[120px]">
+            <div className="w-full lg:max-w-[54%]">
               <h2
                 className="font-semibold leading-[1.1] text-white"
                 style={{ fontSize: UNIFORM_HEADING_SIZE }}
@@ -828,7 +839,7 @@ function Footer() {
         />
 
         {/* Top bar */}
-        <div className="relative z-10 flex items-center justify-between">
+        <div className="relative z-10 flex flex-col items-center gap-2 lg:flex-row lg:justify-between">
           <div className="flex items-center gap-2">
             <span
               className="inline-block h-2.5 w-2.5 rounded-full bg-[#22C55E]"

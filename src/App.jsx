@@ -154,9 +154,9 @@ const HOME_SCROLL_IMAGES = GALLERY_IMAGES.slice(0, 8)
 const UNIFORM_HEADING_SIZE = 'clamp(36px, 4vw, 64px)'
 const UNIFORM_SUBHEADING_SIZE = 'clamp(24px, 2.2vw, 36px)'
 const WORK_CARD_SUBHEADING_SIZE = 'clamp(28px, 2.5vw, 38px)'
-const WORK_CARD_FIXED_HEIGHT = 480
+const WORK_CARD_FIXED_HEIGHT = 520
 const WHAT_I_DO_STICKY_HEIGHT = WORK_CARD_FIXED_HEIGHT + 170
-const WHAT_I_DO_SCROLL_STEP = WORK_CARD_FIXED_HEIGHT
+const WHAT_I_DO_SCROLL_STEP = WORK_CARD_FIXED_HEIGHT * 0.75
 const WHAT_I_DO_CARD_HIDE_SHIFT = WORK_CARD_FIXED_HEIGHT + 36
 const UNIFORM_SUBTEXT_SIZE = 'clamp(14px, 1.1vw, 18px)'
 
@@ -316,6 +316,7 @@ function WorkShowcaseCard({
   cardHeight,
   imageObjectFit = 'contain',
   imageInset,
+  wrapperClassName = 'mx-auto max-w-[1200px]',
 }) {
   const mergedImageStyle = {
     ...imageStyle,
@@ -328,7 +329,7 @@ function WorkShowcaseCard({
 
   return (
     <article
-      className="mx-auto flex w-full max-w-[1200px] flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch"
+      className={`flex w-full flex-col overflow-hidden border border-[#1A1A1A] bg-[#0B0B0B] md:flex-row md:items-stretch ${wrapperClassName}`}
       style={cardStyle}
     >
       {/* Left info panel */}
@@ -429,6 +430,7 @@ function WhatIDoSection() {
   const [scrollProgress, setScrollProgress] = useState(0)
   /* Responsive horizontal padding matching page gutters */
   const [hPad, setHPad] = useState(24)
+  const [cardMaxW, setCardMaxW] = useState(1200)
 
   const cards = WHAT_I_DO_WORK
   const total = cards.length
@@ -437,8 +439,17 @@ function WhatIDoSection() {
   useEffect(() => {
     const update = () => {
       const w = window.innerWidth
+      const pad = w >= 1024 ? 120 : 24
       // Match page padding breakpoints
-      setHPad(w >= 1024 ? 120 : 24)
+      setHPad(pad)
+      // For 1600–1700: stretch card to fill available width; >1700: lock at 1460
+      if (w >= 1700) {
+        setCardMaxW(1460)
+      } else if (w >= 1600) {
+        setCardMaxW(w - pad * 2)
+      } else {
+        setCardMaxW(1200)
+      }
     }
     update()
     window.addEventListener('resize', update)
@@ -472,11 +483,12 @@ function WhatIDoSection() {
   const t = cardFloat - activeIndex
 
   return (
+    // ── What I Do section: 40px top/bottom padding via outer wrapper ──
     <section id="work" ref={containerRef} style={{ height: `${sectionHeight}px` }}>
       <div className="sticky top-0 overflow-hidden bg-[#0A0A0A]" style={{ height: `${WHAT_I_DO_STICKY_HEIGHT}px` }}>
 
-        {/* Section heading */}
-        <div className="absolute top-0 left-0 right-0 z-50" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px`, paddingTop: '48px' }}>
+        {/* Section heading — 40px top padding + 24px bottom gap before cards */}
+        <div className="absolute top-0 left-0 right-0 z-50" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px`, paddingTop: '50px', paddingBottom: '56px' }}>
           <h2
             className="w-full font-semibold leading-[1.2] text-white"
             style={{ fontSize: UNIFORM_HEADING_SIZE }}
@@ -486,14 +498,13 @@ function WhatIDoSection() {
         </div>
 
         {/*
-          Card stage — pushed slightly below center to leave breathing room under heading.
-          left/right set in JS to match page padding so cards sit within the gutters.
+          Card stage — aligned to left padding so cards start directly below heading.
+          No mx-auto centering — card is flush with the heading's left edge.
         */}
         <div
           style={{
             position: 'absolute',
-            /* Shift centre down a bit more to increase heading-to-card spacing */
-            top: 'calc(50% + 80px)',
+            top: 'calc(50% + 90px)',
             left: `${hPad}px`,
             right: `${hPad}px`,
             transform: 'translateY(-50%)',
@@ -501,16 +512,16 @@ function WhatIDoSection() {
           }}
         >
           {cards.map((item, index) => {
-            let translateY, blurPx, imageShiftPx, zIndex
+            let translateY, imageShiftPx, zIndex, opacity = 1
 
             if (index < activeIndex) {
-              translateY = '0px'; blurPx = 14; imageShiftPx = 48; zIndex = index
+              translateY = '0px'; imageShiftPx = 0; zIndex = index; opacity = 0
             } else if (index === activeIndex) {
-              translateY = '0px'; blurPx = t * 14; imageShiftPx = t * 48; zIndex = total
+              translateY = '0px'; imageShiftPx = t * 48; zIndex = total; opacity = 1 - t
             } else if (index === activeIndex + 1) {
-              translateY = `${(1 - t) * WHAT_I_DO_CARD_HIDE_SHIFT}px`; blurPx = 0; imageShiftPx = 0; zIndex = total + 1
+              translateY = `${(1 - t) * WHAT_I_DO_CARD_HIDE_SHIFT}px`; imageShiftPx = 0; zIndex = total + 1; opacity = 1
             } else {
-              translateY = `${WHAT_I_DO_CARD_HIDE_SHIFT}px`; blurPx = 0; imageShiftPx = 0; zIndex = index
+              translateY = `${WHAT_I_DO_CARD_HIDE_SHIFT}px`; imageShiftPx = 0; zIndex = index; opacity = 1
             }
 
             return (
@@ -521,8 +532,8 @@ function WhatIDoSection() {
                   inset: 0,
                   zIndex,
                   transform: `translateY(${translateY})`,
-                  filter: blurPx > 0 ? `blur(${blurPx}px)` : 'none',
-                  willChange: 'transform, filter',
+                  opacity,
+                  willChange: 'transform, opacity',
                 }}
               >
                 {/*
@@ -553,6 +564,7 @@ function WhatIDoSection() {
                   cardHeight={WORK_CARD_FIXED_HEIGHT}
                   imageObjectFit="cover"
                   imageStyle={{ transform: `translateX(${imageShiftPx}px)`, transition: 'none' }}
+                  wrapperClassName=""
                 />
               </div>
             )
@@ -569,8 +581,9 @@ function HomeServicesSection() {
   const [activeId, setActiveId] = useState(null)
 
   return (
-    /* Reduced top gap after What I Do section */
-    <section className="w-full bg-[#0A0A0A] px-6 pb-[80px] pt-[28px] lg:px-[120px]">
+    // ── Services section: 40px top/bottom padding ──
+    <section className="w-full bg-[#0A0A0A] px-6 pt-[50px] pb-[50px] lg:px-[120px]">
+      {/* Service list — gap between heading-area and items handled by first item's top border */}
       <div onMouseLeave={() => setActiveId(null)}>
         {HOME_SERVICES.map((service) => {
           const isActive = activeId === service.id
@@ -733,9 +746,11 @@ function WhereItStartedSection() {
   const translateX = -(scrollProgress * maxShift)
 
   return (
+    // ── Where It Started section: 40px top/bottom padding on sticky container ──
     <section ref={sectionRef} className="w-full bg-[#0A0A0A]" style={{ height: sectionHeight }}>
-      <div ref={stickyRef} className="sticky top-0 overflow-hidden pt-[80px] pb-[48px]">
-        <div className="flex w-full flex-col gap-12">
+      <div ref={stickyRef} className="sticky top-0 overflow-hidden pt-[50px] pb-[50px]">
+        {/* Heading + subtext row — 20px extra gap below before image strip (via gap-14) */}
+        <div className="flex w-full flex-col gap-14">
           {/* Header row — full bleed with page padding */}
           <div className="flex w-full items-end justify-between gap-8 px-6 lg:px-[120px]">
             <div className="max-w-[54%]">
@@ -797,10 +812,10 @@ function Footer() {
     <footer
       className="relative w-full bg-[#0A0A0A]"
     >
-      {/* Content wrapper with page padding — the bg illustration sits inside this */}
+      {/* Footer content wrapper — 40px top/bottom padding for section spacing */}
       <div
         className="relative z-10 flex flex-col px-6 lg:px-[120px]"
-        style={{ minHeight: '640px', paddingTop: '48px' }}
+        style={{ minHeight: '640px', paddingTop: '50px', paddingBottom: '50px' }}
       >
         {/* Background illustration — centred inside the padded content box */}
         <img
@@ -1387,6 +1402,7 @@ function WorkPage() {
                 item={item}
                 cardHeight={WORK_CARD_FIXED_HEIGHT}
                 imageObjectFit="cover"
+                wrapperClassName=""
               />
             ))}
           </div>

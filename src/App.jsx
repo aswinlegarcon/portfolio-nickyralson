@@ -602,7 +602,7 @@ function HomeServicesSection() {
 
   return (
     // ── Services section: 40px top/bottom padding ──
-    <section className="w-full bg-[#0A0A0A] px-6 pt-[50px] pb-[50px] lg:px-[120px]">
+    <section className="w-full bg-[#0A0A0A] px-6 pt-[80px] pb-[50px] lg:px-[120px]">
       {/* Service list — gap between heading-area and items handled by first item's top border */}
       <div onMouseLeave={() => setActiveId(null)}>
         {HOME_SERVICES.map((service) => {
@@ -837,7 +837,7 @@ function Footer() {
       {/* Footer content wrapper — 40px top/bottom padding for section spacing */}
       <div
         className="relative z-10 flex flex-col px-6 lg:px-[120px]"
-        style={{ minHeight: '640px', paddingTop: '50px', paddingBottom: '50px' }}
+        style={{ minHeight: '640px', paddingTop: '50px', paddingBottom: '0px' }}
       >
         {/* Background illustration — centred inside the padded content box */}
         <img

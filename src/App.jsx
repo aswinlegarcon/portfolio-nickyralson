@@ -101,6 +101,7 @@ const WORK_CARDS = [
 ]
 
 const WHAT_I_DO_WORK = WORK_CARDS.slice(0, 3)
+const FIGMA_LINKS = WORK_CARDS.slice(0, 2).map((card) => card.link)
 
 const HOME_SERVICES = [
   {
@@ -156,7 +157,7 @@ const UNIFORM_SUBHEADING_SIZE = 'clamp(24px, 2.2vw, 36px)'
 const WORK_CARD_SUBHEADING_SIZE = 'clamp(28px, 2.5vw, 38px)'
 const WORK_CARD_FIXED_HEIGHT = 520
 const WHAT_I_DO_STICKY_HEIGHT = WORK_CARD_FIXED_HEIGHT + 170
-const WHAT_I_DO_SCROLL_STEP = WORK_CARD_FIXED_HEIGHT * 0.75
+const WHAT_I_DO_SCROLL_STEP = WORK_CARD_FIXED_HEIGHT * 1.5
 const WHAT_I_DO_CARD_HIDE_SHIFT = WORK_CARD_FIXED_HEIGHT + 36
 const UNIFORM_SUBTEXT_SIZE = 'clamp(14px, 1.1vw, 18px)'
 
@@ -328,6 +329,7 @@ function WorkShowcaseCard({
   imageObjectFit = 'contain',
   imageInset,
   wrapperClassName = 'mx-auto max-w-[1200px]',
+  onViewWork,
 }) {
   const mergedImageStyle = {
     ...imageStyle,
@@ -357,7 +359,15 @@ function WorkShowcaseCard({
           </h3>
         </div>
 
-        {item.isInternal ? (
+        {onViewWork ? (
+          <button
+            type="button"
+            onClick={onViewWork}
+            className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase leading-[26px] text-white hover:opacity-70 transition-opacity"
+          >
+            View Work <span aria-hidden="true">→</span>
+          </button>
+        ) : item.isInternal ? (
           <Link
             to={item.link}
             className="mt-6 inline-flex w-fit items-center gap-2 text-[14px] font-semibold uppercase leading-[26px] text-white hover:opacity-70 transition-opacity"
@@ -436,7 +446,7 @@ function CardDots({ total, activeIndex, transitionProgress }) {
 
 // ─── WhatIDoSection (Stacked Scroll Cards) ────────────────────────────────────
 
-function WhatIDoSection() {
+function WhatIDoSection({ onFigmaOpen }) {
   const containerRef = useRef(null)
   const [scrollProgress, setScrollProgress] = useState(0)
   /* Responsive horizontal padding matching page gutters */
@@ -576,6 +586,7 @@ function WhatIDoSection() {
                   imageObjectFit="cover"
                   imageStyle={{ transform: `translateX(${imageShiftPx}px)`, transition: 'none' }}
                   wrapperClassName=""
+                  onViewWork={index < 2 && onFigmaOpen ? () => onFigmaOpen(index) : undefined}
                 />
               </div>
             )
@@ -1208,12 +1219,85 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext
   )
 }
 
+// ─── FigmaLightbox ────────────────────────────────────────────────────────────
+// Figma embeds don't expose a public postMessage API for external slide navigation.
+// Cross-origin security also prevents dispatching synthetic keyboard events into
+// the iframe. Instead we auto-focus the iframe so the user can immediately use
+// ← / → arrow keys (which Figma's prototype viewer natively supports) or click
+// through hotspots inside the prototype.
+
+function FigmaLightbox({ links, activeIndex, onClose }) {
+  const iframeRef = useRef(null)
+
+  useEffect(() => {
+    if (activeIndex === null) return
+    document.body.style.overflow = 'hidden'
+
+    // Auto-focus the iframe so keyboard arrows work immediately
+    const focusTimer = setTimeout(() => {
+      iframeRef.current?.focus()
+    }, 800)
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+      // Arrow keys are NOT captured here — they flow into the focused iframe
+      // for Figma's built-in prototype navigation.
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', onKeyDown)
+      clearTimeout(focusTimer)
+    }
+  }, [activeIndex, onClose])
+
+  if (activeIndex === null) return null
+
+  const currentLink = links[activeIndex]
+  const embedUrl = `https://www.figma.com/embed?embed_host=share&url=${encodeURIComponent(currentLink.trim())}`
+
+  return (
+    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/85 backdrop-blur-md p-6" onClick={onClose}>
+      {/* Close button */}
+      <div className="absolute right-6 top-6 z-20">
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onClose() }}
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/50 text-base text-white transition-colors hover:border-white/50 backdrop-blur"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Figma embed iframe */}
+      <div className="relative h-[86vh] w-[86vw]" onClick={(e) => e.stopPropagation()}>
+        <iframe
+          ref={iframeRef}
+          src={embedUrl}
+          title="Figma prototype"
+          className="h-full w-full rounded-lg border border-white/10"
+          style={{ background: '#1e1e1e' }}
+          allowFullScreen
+          tabIndex={0}
+        />
+      </div>
+
+      {/* Navigation hint */}
+      <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-5 py-2.5 text-[13px] text-white/80">
+        Use ← → keys to navigate · Esc to close
+      </div>
+    </div>
+  )
+}
+
 // ─── HomePage ─────────────────────────────────────────────────────────────────
 
 function HomePage() {
   const [heroHovered, setHeroHovered] = useState(false)
   const [heroPointer, setHeroPointer] = useState({ x: 0, y: 0 })
   const [textProgress, setTextProgress] = useState(0)
+  const [figmaIndex, setFigmaIndex] = useState(null)
   const aboutTextRef = useRef(null)
   const actualHeroRef = useRef({ x: 0, y: 0 })
   const trailingHeroRef = useRef({ x: 0, y: 0 })
@@ -1376,10 +1460,16 @@ function HomePage() {
         </div>
       </section>
 
-      <WhatIDoSection />
+      <WhatIDoSection onFigmaOpen={(index) => setFigmaIndex(index)} />
       <HomeServicesSection />
       <WhereItStartedSection />
       <Footer />
+
+      <FigmaLightbox
+        links={FIGMA_LINKS}
+        activeIndex={figmaIndex}
+        onClose={() => setFigmaIndex(null)}
+      />
     </main>
   )
 }
@@ -1441,6 +1531,10 @@ function WorkPage() {
 // ─── Project3CasePage ────────────────────────────────────────────────────────
 
 function Project3CasePage() {
+  const [figmaOpen, setFigmaOpen] = useState(false)
+
+  const figmaLink = 'https://www.figma.com/proto/ZJvl3bW8ooubpkivtCLQDH/Portfolio--Nicky-Ralson-?node-id=387-4073&viewport=647%2C606%2C0.08&t=nYquiMd4LS0OxI0c-1&scaling=min-zoom&content-scaling=fixed&page-id=349%3A18'
+
   return (
     <main className="min-h-screen bg-[#0A0A0A] text-white">
       <TopNav />
@@ -1567,17 +1661,25 @@ function Project3CasePage() {
         <WorkShowcaseCard
           cardHeight={WORK_CARD_FIXED_HEIGHT}
           imageObjectFit="cover"
+          wrapperClassName=""
+          onViewWork={() => setFigmaOpen(true)}
           item={{
             id: 'outcome',
             tag: 'OUTCOME',
             title: 'Delivered 100+ homepage designs with better consistency and faster execution by using reusable layout systems.',
             description: '',
             image: '/assets/work3-img.png',
-            link: 'https://www.figma.com/proto/ZJvl3bW8ooubpkivtCLQDH/Portfolio--Nicky-Ralson-?node-id=387-4073&viewport=647%2C606%2C0.08&t=nYquiMd4LS0OxI0c-1&scaling=min-zoom&content-scaling=fixed&page-id=349%3A18',
+            link: figmaLink,
             isInternal: false,
           }}
         />
       </section>
+
+      <FigmaLightbox
+        links={[figmaLink]}
+        activeIndex={figmaOpen ? 0 : null}
+        onClose={() => setFigmaOpen(false)}
+      />
 
       <Footer />
     </main>

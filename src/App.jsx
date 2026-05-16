@@ -1396,14 +1396,14 @@ function HomePage() {
            MOBILE TEXT WIDTH: max-w-[240px] controls how wide the heading is on mobile (increase for fewer lines) */}
         <div className="pointer-events-none absolute left-0 right-0 top-[50px] z-20 flex items-start justify-between sm:top-[74px] lg:top-[119px]">
           <h1
-            className="max-w-[240px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] text-[#F5F5F5] sm:max-w-[280px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
+            className="max-w-[340px] pl-6 text-[clamp(28px,8vw,40px)] font-semibold leading-[1.03] text-[#F5F5F5] sm:max-w-[340px] sm:text-[clamp(32px,7vw,46px)] lg:max-w-none lg:pl-[120px] lg:text-[clamp(36px,4vw,64px)]"
           >
             Visual &<br />Product Designer
           </h1>
 
           {/* Images are flush to the right viewport edge — no right padding
              These images share the same top offset as the hero text wrapper above */}
-          <div className="flex items-start gap-0.5 flex-shrink-0">
+          <div className="flex flex-col items-end gap-0.5 flex-shrink-0 sm:flex-row sm:items-start">
             <img src="/assets/Hero%20image%20element%201.png" alt="Hero element 1" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
             <img src="/assets/Hero%20image%20element%202.png" alt="Hero element 2" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
             <img src="/assets/Hero%20image%20element%203.png" alt="Hero element 3" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />

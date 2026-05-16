@@ -452,6 +452,15 @@ function WhatIDoSection({ onFigmaOpen }) {
   /* Responsive horizontal padding matching page gutters */
   const [hPad, setHPad] = useState(24)
   const [cardMaxW, setCardMaxW] = useState(1200)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    setIsMobile(mq.matches)
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   const cards = WHAT_I_DO_WORK
   const total = cards.length
@@ -586,7 +595,7 @@ function WhatIDoSection({ onFigmaOpen }) {
                   imageObjectFit="cover"
                   imageStyle={{ transform: `translateX(${imageShiftPx}px)`, transition: 'none' }}
                   wrapperClassName=""
-                  onViewWork={index < 2 && onFigmaOpen ? () => onFigmaOpen(index) : undefined}
+                  onViewWork={index < 2 && onFigmaOpen && !isMobile ? () => onFigmaOpen(index) : undefined}
                 />
               </div>
             )
@@ -1243,21 +1252,37 @@ function FigmaLightbox({ links, activeIndex, onClose }) {
     if (activeIndex === null) return
     document.body.style.overflow = 'hidden'
 
-    // Auto-focus the iframe so keyboard arrows work immediately
-    const focusTimer = setTimeout(() => {
-      iframeRef.current?.focus()
-    }, 800)
+    // NOTE: We intentionally do NOT auto-focus the iframe here.
+    // Auto-focusing a cross-origin iframe steals keyboard events from the
+    // parent window, which prevents Escape from closing the lightbox.
+    // Users can click inside the Figma prototype to interact with it;
+    // arrow-key navigation will work once the iframe is clicked.
 
     const onKeyDown = (event) => {
       if (event.key === 'Escape') onClose()
-      // Arrow keys are NOT captured here — they flow into the focused iframe
-      // for Figma's built-in prototype navigation.
     }
     window.addEventListener('keydown', onKeyDown)
+
+    // When the iframe steals focus (user clicks into it), Escape stops
+    // reaching the parent window. Listen for the window blur event and
+    // pull focus back so the next Escape keypress is caught.
+    const onWindowBlur = () => {
+      // Small delay to let the blur settle, then refocus the document
+      // so our keydown listener receives subsequent key presses.
+      setTimeout(() => {
+        if (document.activeElement === iframeRef.current) {
+          // Move focus to the lightbox close button so Escape still works
+          // while the Figma prototype remains visible and scrollable.
+          document.body.focus()
+        }
+      }, 0)
+    }
+    window.addEventListener('blur', onWindowBlur)
+
     return () => {
       document.body.style.overflow = ''
       window.removeEventListener('keydown', onKeyDown)
-      clearTimeout(focusTimer)
+      window.removeEventListener('blur', onWindowBlur)
     }
   }, [activeIndex, onClose])
 
@@ -1341,9 +1366,7 @@ function FigmaLightbox({ links, activeIndex, onClose }) {
 
       {/* Navigation hint — adapts for touch vs keyboard */}
       <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-5 py-2.5 text-[13px] text-white/80">
-        {isTouchDevice
-          ? 'Swipe left to go next · Swipe right to go back'
-          : 'Use ← → keys to navigate · Esc to close'}
+        {'Use ← → keys to navigate · Esc to close'}
       </div>
     </div>
   )
@@ -1594,6 +1617,15 @@ function WorkPage() {
 
 function Project3CasePage() {
   const [figmaOpen, setFigmaOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    setIsMobile(mq.matches)
+    const handler = (e) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
 
   const figmaLink = 'https://www.figma.com/proto/ZJvl3bW8ooubpkivtCLQDH/Portfolio--Nicky-Ralson-?node-id=387-4073&viewport=647%2C606%2C0.08&t=nYquiMd4LS0OxI0c-1&scaling=min-zoom&content-scaling=fixed&page-id=349%3A18'
 
@@ -1724,7 +1756,7 @@ function Project3CasePage() {
           cardHeight={WORK_CARD_FIXED_HEIGHT}
           imageObjectFit="cover"
           wrapperClassName=""
-          onViewWork={() => setFigmaOpen(true)}
+          onViewWork={!isMobile ? () => setFigmaOpen(true) : undefined}
           item={{
             id: 'outcome',
             tag: 'OUTCOME',

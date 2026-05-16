@@ -509,7 +509,7 @@ function WhatIDoSection({ onFigmaOpen }) {
       <div className="sticky top-0 overflow-hidden bg-[#0A0A0A]" style={{ height: `${WHAT_I_DO_STICKY_HEIGHT}px` }}>
 
         {/* Section heading — 40px top padding + 24px bottom gap before cards */}
-        <div className="absolute top-0 left-0 right-0 z-50" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px`, paddingTop: '50px', paddingBottom: '56px' }}>
+        <div className="absolute top-0 left-0 right-0 z-50 pt-7 pb-7 lg:pt-[50px] lg:pb-[56px]" style={{ paddingLeft: `${hPad}px`, paddingRight: `${hPad}px` }}>
           <h2
             className="w-full font-semibold leading-[1.2] text-white"
             style={{ fontSize: UNIFORM_HEADING_SIZE }}
@@ -613,7 +613,7 @@ function HomeServicesSection() {
 
   return (
     // ── Services section: 40px top/bottom padding ──
-    <section className="w-full bg-[#0A0A0A] px-6 pt-[80px] pb-[50px] lg:px-[120px]">
+    <section className="w-full bg-[#0A0A0A] px-6 pt-7 pb-7 lg:px-[120px] lg:pt-[80px] lg:pb-[50px]">
       {/* Service list — gap between heading-area and items handled by first item's top border */}
       <div onMouseLeave={() => setActiveId(null)}>
         {HOME_SERVICES.map((service) => {
@@ -781,7 +781,7 @@ function WhereItStartedSection() {
   return (
     // ── Where It Started section: 40px top/bottom padding on sticky container ──
     <section ref={sectionRef} className="w-full bg-[#0A0A0A]" style={{ height: sectionHeight }}>
-      <div ref={stickyRef} className="sticky top-0 overflow-hidden pt-[50px] pb-[50px]">
+      <div ref={stickyRef} className="sticky top-0 overflow-hidden pt-7 pb-7 lg:pt-[50px] lg:pb-[50px]">
         {/* Heading + subtext row — 20px extra gap below before image strip (via gap-14) */}
         <div className="flex w-full flex-col gap-14">
           {/* Header row — full bleed with page padding */}
@@ -847,21 +847,25 @@ function Footer() {
     >
       {/* Footer content wrapper — 40px top/bottom padding for section spacing */}
       <div
-        className="relative z-10 flex flex-col px-6 lg:px-[120px]"
-        style={{ minHeight: '640px', paddingTop: '50px', paddingBottom: '0px' }}
+        className="relative z-10 flex flex-col gap-[32px] px-6 pt-7 lg:gap-0 lg:px-[120px] lg:pt-[50px]"
+        style={{ minHeight: 'var(--footer-min-h)' }}
       >
+        <style>{`
+          :root { --footer-min-h: auto; }
+          @media (min-width: 1024px) { :root { --footer-min-h: 640px; } }
+        `}</style>
         {/* Background illustration — centred inside the padded content box */}
         <img
           src="/assets/Footer bg.svg"
           alt=""
           aria-hidden="true"
           className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none"
-          style={{ width: 'clamp(200px, 16vw, 300px)', height: 'auto', zIndex: 0 }}
+          style={{ width: 'clamp(140px, 16vw, 300px)', height: 'auto', maxHeight: '60%', objectFit: 'contain', zIndex: 0 }}
           draggable={false}
         />
 
         {/* Top bar */}
-        <div className="relative z-10 flex flex-col items-center gap-2 lg:flex-row lg:justify-between">
+        <div className="relative z-10 flex flex-col items-center gap-[12px] lg:flex-row lg:gap-2 lg:justify-between">
           <div className="flex items-center gap-2">
             <span
               className="inline-block h-2.5 w-2.5 rounded-full bg-[#22C55E]"
@@ -869,7 +873,7 @@ function Footer() {
             />
             <span
               className="text-white"
-              style={{ fontSize: 'clamp(14px, 1.2vw, 20px)', fontWeight: 400, lineHeight: '28px' }}
+              style={{ fontSize: 'clamp(12px, 1.2vw, 20px)', fontWeight: 400, lineHeight: '24px' }}
             >
               Available for opportunities
             </span>
@@ -877,9 +881,9 @@ function Footer() {
 
           <span
             style={{
-              fontSize: 'clamp(13px, 1.1vw, 20px)',
+              fontSize: 'clamp(11px, 1.1vw, 20px)',
               fontWeight: 400,
-              lineHeight: '28px',
+              lineHeight: '24px',
               color: '#878787',
             }}
           >
@@ -888,11 +892,11 @@ function Footer() {
         </div>
 
         {/* Centre CTA */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-8 py-14">
+        <div className="relative z-10 flex flex-col items-center gap-5 py-0 lg:flex-1 lg:justify-center lg:gap-8 lg:py-14">
           <p
             className="text-center text-white"
             style={{
-              fontSize: 'clamp(20px, 2.2vw, 34px)',
+              fontSize: 'clamp(17px, 2.2vw, 34px)',
               fontWeight: 400,
               lineHeight: '1.35',
               maxWidth: '800px',
@@ -910,12 +914,11 @@ function Footer() {
           </a>
         </div>
 
-        {/* Divider */}
-        <div className="relative z-10 h-px w-full bg-[#1A1A1A]" />
-
-        {/* Bottom bar */}
-        <div className="relative z-10 flex items-center justify-between py-6">
-          <div className="flex items-center gap-6">
+        {/* Divider + Bottom bar — wrapped to remove the outer gap-[32px] between them */}
+        <div className="relative z-10 mt-auto">
+          <div className="h-px w-full bg-[#1A1A1A]" />
+          <div className="flex flex-row items-center justify-between gap-3 py-4 lg:py-6">
+            <div className="flex items-center gap-6">
             <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn">
               <img src="/assets/Linkedin.svg" alt="LinkedIn" className="h-6 w-6 opacity-70 transition-opacity hover:opacity-100" draggable={false} />
             </a>
@@ -931,14 +934,15 @@ function Footer() {
             <img src="/assets/location-svgrepo-com 1.svg" alt="" aria-hidden="true" className="h-5 w-5 opacity-60" draggable={false} />
             <span
               style={{
-                fontSize: 'clamp(13px, 1vw, 20px)',
+                fontSize: 'clamp(11px, 1vw, 20px)',
                 fontWeight: 400,
-                lineHeight: '28px',
+                lineHeight: '24px',
                 color: '#878787',
               }}
             >
               Coimbatore, Tamil Nadu
             </span>
+          </div>
           </div>
         </div>
       </div>
@@ -1403,10 +1407,14 @@ function HomePage() {
 
           {/* Images are flush to the right viewport edge — no right padding
              These images share the same top offset as the hero text wrapper above */}
+          {/* HERO ELEMENT IMAGES — stacked vertically on mobile, horizontal on sm+
+               CHANGE MOBILE SIZE: edit the first h-[clamp(...)] below (min 64px, preferred 12vw, max 88px)
+               CHANGE SM SIZE: edit sm:h-[clamp(...)] (min 56px, preferred 8vw, max 84px)
+               CHANGE DESKTOP SIZE: edit lg:h-[clamp(...)] (min 80px, preferred 10vw, max 128px) */}
           <div className="flex flex-col items-end gap-0.5 flex-shrink-0 sm:flex-row sm:items-start">
-            <img src="/assets/Hero%20image%20element%201.png" alt="Hero element 1" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
-            <img src="/assets/Hero%20image%20element%202.png" alt="Hero element 2" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
-            <img src="/assets/Hero%20image%20element%203.png" alt="Hero element 3" className="h-[clamp(46px,8vw,64px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
+            <img src="/assets/Hero%20image%20element%201.png" alt="Hero element 1" className="h-[clamp(64px,12vw,88px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
+            <img src="/assets/Hero%20image%20element%202.png" alt="Hero element 2" className="h-[clamp(64px,12vw,88px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
+            <img src="/assets/Hero%20image%20element%203.png" alt="Hero element 3" className="h-[clamp(64px,12vw,88px)] w-auto object-cover sm:h-[clamp(56px,8vw,84px)] lg:h-[clamp(80px,10vw,128px)]" />
           </div>
         </div>
 
@@ -1429,7 +1437,7 @@ function HomePage() {
       </section>
 
       {/* ── About + logos ── */}
-      <section className="w-full bg-[#0A0A0A] px-6 py-20 lg:px-[120px]">
+      <section className="w-full bg-[#0A0A0A] px-6 py-7 lg:px-[120px] lg:py-20">
         {/* Scroll-reading text — no inner max-width cap */}
         <div ref={aboutTextRef}>
           <ScrollReadingText text={ABOUT_TEXT} progress={textProgress} />
@@ -1481,8 +1489,8 @@ function WorkPage() {
     <main className="min-h-screen bg-[#0A0A0A] text-white">
       <TopNav />
 
-      <section className="w-full px-6 py-20 lg:px-[120px]">
-        <div className="py-10">
+      <section className="w-full px-6 py-7 lg:px-[120px] lg:py-20">
+        <div className="py-5 lg:py-10">
           <h1
             className="w-full font-semibold leading-[1.2] text-white"
             style={{ fontSize: UNIFORM_HEADING_SIZE }}
@@ -1581,7 +1589,7 @@ function Project3CasePage() {
       </section>
 
       {/* ── Problem / Solution ── */}
-      <section className="w-full px-6 py-16 lg:px-[120px] lg:py-20">
+      <section className="w-full px-6 py-7 lg:px-[120px] lg:py-20">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
 
           {/* Problem card */}
@@ -1647,7 +1655,7 @@ function Project3CasePage() {
       </section>
 
       {/* ── Outcome — WorkShowcaseCard matching the home & work page card size ── */}
-      <section className="w-full px-6 pb-20 lg:px-[120px] lg:pb-28">
+      <section className="w-full px-6 pb-7 lg:px-[120px] lg:pb-28">
         {/*
           ── FIX 3: Project 3 outcome card ─────────────────────────────────────
           cardHeight={WORK_CARD_FIXED_HEIGHT}
@@ -1701,7 +1709,7 @@ function GalleryPage() {
     <main className="min-h-screen bg-[#0A0A0A] text-white">
       <TopNav />
 
-      <section className="w-full px-6 py-20 lg:px-[120px]">
+      <section className="w-full px-6 py-7 lg:px-[120px] lg:py-20">
         {/* No inner max-width — full bleed within padding */}
         <h1
           className="font-semibold leading-[1.1] text-white"

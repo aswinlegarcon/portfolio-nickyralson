@@ -1232,6 +1232,12 @@ function GalleryLightbox({ images, activeIndex, onClose, onNext, onPrev, canNext
 
 function FigmaLightbox({ links, activeIndex, onClose }) {
   const iframeRef = useRef(null)
+  const touchStartRef = useRef({ x: 0, y: 0 })
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
+
+  useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0)
+  }, [])
 
   useEffect(() => {
     if (activeIndex === null) return
@@ -1255,6 +1261,47 @@ function FigmaLightbox({ links, activeIndex, onClose }) {
     }
   }, [activeIndex, onClose])
 
+  /* ── Swipe-to-navigate for mobile ──
+     On touch devices keyboard arrows aren't available, so we detect horizontal
+     swipe gestures on the iframe wrapper and dispatch synthetic ArrowLeft /
+     ArrowRight KeyboardEvents into the focused iframe. */
+  const handleTouchStart = (e) => {
+    touchStartRef.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    }
+  }
+
+  const handleTouchEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartRef.current.x
+    const dy = e.changedTouches[0].clientY - touchStartRef.current.y
+    const MIN_SWIPE = 50
+
+    // Only act on horizontal swipes longer than threshold
+    if (Math.abs(dx) < MIN_SWIPE || Math.abs(dy) > Math.abs(dx)) return
+
+    // Swipe left → go next (ArrowRight), swipe right → go previous (ArrowLeft)
+    const key = dx < 0 ? 'ArrowRight' : 'ArrowLeft'
+
+    if (iframeRef.current) {
+      iframeRef.current.focus()
+      // Dispatch on the iframe element — browser may forward to focused iframe
+      iframeRef.current.dispatchEvent(
+        new KeyboardEvent('keydown', { key, code: key, bubbles: true, cancelable: true })
+      )
+      iframeRef.current.dispatchEvent(
+        new KeyboardEvent('keyup', { key, code: key, bubbles: true, cancelable: true })
+      )
+      // Also try postMessage as a fallback (Figma may or may not listen)
+      try {
+        iframeRef.current.contentWindow.postMessage(
+          { type: 'keydown', key, code: key },
+          '*'
+        )
+      } catch (_) { /* cross-origin — expected */ }
+    }
+  }
+
   if (activeIndex === null) return null
 
   const currentLink = links[activeIndex]
@@ -1274,8 +1321,13 @@ function FigmaLightbox({ links, activeIndex, onClose }) {
         </button>
       </div>
 
-      {/* Figma embed iframe */}
-      <div className="relative h-[86vh] w-[86vw]" onClick={(e) => e.stopPropagation()}>
+      {/* Figma embed iframe — swipe handlers for mobile navigation */}
+      <div
+        className="relative h-[86vh] w-[86vw]"
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <iframe
           ref={iframeRef}
           src={embedUrl}
@@ -1287,9 +1339,11 @@ function FigmaLightbox({ links, activeIndex, onClose }) {
         />
       </div>
 
-      {/* Navigation hint */}
+      {/* Navigation hint — adapts for touch vs keyboard */}
       <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 rounded-full border border-white/15 bg-black/40 px-5 py-2.5 text-[13px] text-white/80">
-        Use ← → keys to navigate · Esc to close
+        {isTouchDevice
+          ? 'Swipe left to go next · Swipe right to go back'
+          : 'Use ← → keys to navigate · Esc to close'}
       </div>
     </div>
   )

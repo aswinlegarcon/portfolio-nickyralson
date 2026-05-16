@@ -592,7 +592,7 @@ function WhatIDoSection({ onFigmaOpen }) {
                 <WorkShowcaseCard
                   item={item}
                   cardHeight={WORK_CARD_FIXED_HEIGHT}
-                  imageObjectFit="cover"
+                  imageObjectFit="contain"
                   imageStyle={{ transform: `translateX(${imageShiftPx}px)`, transition: 'none' }}
                   wrapperClassName=""
                   onViewWork={index < 2 && onFigmaOpen && !isMobile ? () => onFigmaOpen(index) : undefined}
